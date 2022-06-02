@@ -7,7 +7,7 @@ on:
 
 permissions:
   id-token: write # required to use OIDC authentication
-  contents: read # required to checkout the code from the repo
+  contents: write # to push tags and commits
 
 jobs:
   CI:
@@ -35,6 +35,14 @@ jobs:
       - name: CodeArtifact login
         run: aws codeartifact login --tool npm --repository ui --domain sundae --domain-owner 320450105600
 
+      - name: Git Identity
+        run: |
+          git config --global user.name '🤖🍦'
+          git config --global user.email '🤖🍦@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -50,12 +58,27 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Config git user
+      - name: Set Current Version
         run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          CURRENT_VERSION=$(node -p 'require("./lerna.json").version')
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
+
+      - name: Tag Check
+        id: tag_check
+        run: |
+          GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
+          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
+            -H "Authorization: token ${GITHUB_TOKEN}")
+          if [ "$http_status_code" -ne "404" ] ; then
+            echo "::set-output name=exists_tag::true"
+          else
+            echo "::set-output name=exists_tag::false"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump versions and publish packages
+        if: steps.tag_check.outputs.exists_tag == 'false'
         run: |
           yarn version:ci
           yarn publish:ci
