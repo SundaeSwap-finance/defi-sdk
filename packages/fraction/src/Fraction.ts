@@ -56,7 +56,6 @@ export class Fraction {
       denominator
     );
   }
-
   readonly numerator: bigint;
   readonly denominator: bigint;
 

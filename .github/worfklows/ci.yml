@@ -1,0 +1,44 @@
+name: CI
+
+on: push
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+jobs:
+  CI:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::320450105600:role/GitHubActionRole
+          role-duration-seconds: 900 # the ttl of the session, in seconds.
+          aws-region: us-east-2 # use your region here.
+
+      - name: CodeArtifact login
+        run: aws codeartifact login --tool npm --repository ui --domain sundae --domain-owner 320450105600
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Type Check
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test

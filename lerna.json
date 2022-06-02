@@ -1,0 +1,20 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "useWorkspaces": true,
+  "npmClient": "yarn",
+  "ignoreChanges": [
+    "**/__tests__/**",
+    "**/__fixtures__/**",
+    "**/*.test.js",
+    "**/*.md"
+  ],
+  "command": {
+    "publish": {
+      "message": "chore(release): publish",
+      "registry": "https://sundae-320450105600.d.codeartifact.us-east-2.amazonaws.com/npm/ui/"
+    }
+  },
+  "version": "0.0.0"
+}
