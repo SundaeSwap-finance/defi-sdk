@@ -1,6 +1,6 @@
 {
   "name": "@sundae/fraction",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Minimal rational number library using BigInt",
   "repository": "https://github.com/sundaeswap-finance/frontend-configurations/tree/master/packages/eslint-config-sundae",
   "author": "Miklos Suveges <miklos.suveges@gmail.com>",
@@ -32,13 +32,11 @@
     "lint:fix": "yarn lint -- --fix",
     "clean": "rm -rf ./dist"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^28.1.0",
     "jest": "^28.1.0",
     "ts-jest": "^28.0.3",
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
-  },
-  "peerDependencies": {}
+  }
 }
