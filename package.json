@@ -19,12 +19,15 @@
   "scripts": {
     "lint": "eslint --ext js,jsx,ts,tsx .",
     "lint:fix": "yarn lint --fix",
+    "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
     "build": "lerna run build --scope '@sundae/*'",
     "test": "lerna run test --stream --scope '@sundae/*'",
     "bump": "lerna version patch --no-git-tag-version --yes",
     "preinstall": "node tools/preinstall.ts && aws codeartifact login --tool npm --repository ui --domain sundae --domain-owner 320450105600 --namespace @sundae",
     "prepare": "husky install",
+    "version:ci": "lerna version --create-release github -y",
+    "publish:ci": "lerna publish from-package -y",
     "release": "yarn build && lerna publish from-package -y",
     "canary": "lerna publish from-package -y --canary",
     "typecheck": "tsc --noEmit"

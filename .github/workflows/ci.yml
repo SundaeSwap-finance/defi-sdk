@@ -1,6 +1,9 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write # required to use OIDC authentication
@@ -8,10 +11,11 @@ permissions:
 
 jobs:
   CI:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest, macos-latest]
+    # runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code
@@ -34,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Lerna bootstrap
+        run: yarn bootstrap
+
       - name: Lint
         run: yarn lint
 
@@ -42,3 +49,15 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: Config git user
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Bump versions and publish packages
+        run: |
+          yarn version:ci
+          yarn publish:ci
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
