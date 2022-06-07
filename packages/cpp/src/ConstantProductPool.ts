@@ -1,7 +1,20 @@
 import { Fraction, TFractionLike } from "@sundae/fraction";
+import { sqrt } from "@sundae/bigint-math";
 
 export type TPair = [bigint, bigint];
 // export type TPool = [bigint, bigint, TFractionLike];
+
+export const getLp = (a: bigint, b: bigint) => sqrt(a * b);
+
+export const getTokensForLp = (
+  lp: bigint,
+  aReserve: bigint,
+  bReserve: bigint,
+  totalLp: bigint
+): TPair => [
+  new Fraction(lp * aReserve, totalLp).quotient,
+  new Fraction(lp * bReserve, totalLp).quotient,
+];
 
 export type TSwapOutcome = {
   input: bigint;
