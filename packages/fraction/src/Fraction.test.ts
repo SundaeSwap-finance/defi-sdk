@@ -44,15 +44,33 @@ describe("Fraction", () => {
   });
 
   test(".parseString()", () => {
-    expect(Fraction.parseString("0.04").equals(new Fraction(1, 25))).toBe(true);
+    expect(Fraction.parseString("0.04").eq(new Fraction(1, 25))).toBe(true);
     expect(
-      Fraction.parseString("1000000.00004").equals(
+      Fraction.parseString("1000000.00004").eq(
         new Fraction(1_000_000 * 25_000 + 1, 25_000)
       )
     ).toBe(true);
-    expect(Fraction.parseString("0").equals(Fraction.ZERO)).toBe(true);
-    expect(Fraction.parseString("1").equals(Fraction.ONE)).toBe(true);
-    expect(Fraction.parseString("1000").equals(Fraction.THOUSAND)).toBe(true);
+    expect(Fraction.parseString("0").eq(Fraction.ZERO)).toBe(true);
+    expect(Fraction.parseString("1").eq(Fraction.ONE)).toBe(true);
+    expect(Fraction.parseString("1000").eq(Fraction.THOUSAND)).toBe(true);
+  });
+
+  test(".asFraction", () => {
+    expect(Fraction.asFraction(-0.3).eq(new Fraction(3, -10))).toBe(true);
+    expect(Fraction.asFraction("-0.3")).toEqual(new Fraction(-3, 10));
+    expect(Fraction.asFraction(0.1)).toEqual(new Fraction(1, 10));
+    expect(Fraction.asFraction(1231n)).toEqual(new Fraction(1231));
+
+    expect(
+      Fraction.asFraction(`0.${"0".repeat(Fraction.MAX_DECIMALS)}1`).eq(
+        Fraction.ZERO
+      )
+    );
+    expect(
+      Fraction.asFraction(`0.${"0".repeat(Fraction.MAX_DECIMALS - 1)}1`).eq(
+        new Fraction(1, 10 ** Fraction.MAX_DECIMALS)
+      )
+    );
   });
 
   // test("#toLocaleString()", () => {
@@ -79,30 +97,30 @@ describe("Fraction", () => {
   // test(".fromLocaleString()", () => {
   //   const testFraction = new Fraction(1_000_000 * 25_000 + 1, 25_000);
   //   expect(
-  //     Fraction.fromLocaleString("1.000.000,00004", "de-DE").equals(testFraction)
+  //     Fraction.fromLocaleString("1.000.000,00004", "de-DE").eq(testFraction)
   //   ).toBe(true);
   //   expect(
-  //     Fraction.fromLocaleString("1’000’000.00004", "it-CH").equals(testFraction)
+  //     Fraction.fromLocaleString("1’000’000.00004", "it-CH").eq(testFraction)
   //   ).toBe(true);
   //   expect(
-  //     Fraction.fromLocaleString("1\xa0000\xa0000,00004", "hu-HU").equals(
+  //     Fraction.fromLocaleString("1\xa0000\xa0000,00004", "hu-HU").eq(
   //       testFraction
   //     )
   //   ).toBe(true);
   //   expect(
-  //     Fraction.fromLocaleString("1\u202f000\u202f000,00004", "fr-FR").equals(
+  //     Fraction.fromLocaleString("1\u202f000\u202f000,00004", "fr-FR").eq(
   //       testFraction
   //     )
   //   ).toBe(true);
   //   expect(
-  //     Fraction.fromLocaleString("1,000,000.00004").equals(testFraction)
+  //     Fraction.fromLocaleString("1,000,000.00004").eq(testFraction)
   //   ).toBe(true);
-  //   expect(Fraction.fromLocaleString("0.04").equals(new Fraction(1, 25))).toBe(
+  //   expect(Fraction.fromLocaleString("0.04").eq(new Fraction(1, 25))).toBe(
   //     true
   //   );
-  //   expect(Fraction.fromLocaleString("0").equals(Fraction.ZERO)).toBe(true);
-  //   expect(Fraction.fromLocaleString("1").equals(Fraction.ONE)).toBe(true);
-  //   expect(Fraction.fromLocaleString("1000").equals(Fraction.THOUSAND)).toBe(
+  //   expect(Fraction.fromLocaleString("0").eq(Fraction.ZERO)).toBe(true);
+  //   expect(Fraction.fromLocaleString("1").eq(Fraction.ONE)).toBe(true);
+  //   expect(Fraction.fromLocaleString("1000").eq(Fraction.THOUSAND)).toBe(
   //     true
   //   );
   // });

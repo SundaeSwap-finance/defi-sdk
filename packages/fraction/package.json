@@ -2,8 +2,10 @@
   "name": "@sundae/fraction",
   "version": "0.1.2",
   "description": "Minimal rational number library using BigInt",
-  "repository": "https://github.com/sundaeswap-finance/frontend-configurations/tree/master/packages/eslint-config-sundae",
-  "author": "Miklos Suveges <miklos.suveges@gmail.com>",
+  "author": {
+    "name": "SundaeSwap Labs, Inc.",
+    "url": "https://www.sundaeswap.finance/"
+  },
   "license": "UNLICENSED",
   "sideEffects": false,
   "exports": {

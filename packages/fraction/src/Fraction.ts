@@ -1,4 +1,5 @@
-export type TFractionLike = number | string | bigint;
+// eslint-disable-next-line no-use-before-define
+export type TFractionLike = number | string | bigint | Fraction;
 export type TIntegerLike = number | string | bigint;
 
 export enum FractionError {
@@ -24,7 +25,7 @@ export class Fraction {
     return 0;
   }
 
-  static asFraction(fraction: Fraction | TFractionLike): Fraction {
+  static asFraction(fraction: TFractionLike): Fraction {
     return fraction instanceof Fraction
       ? fraction
       : Fraction.parseString(fraction.toString());
@@ -47,19 +48,25 @@ export class Fraction {
     if (!fractionalPart?.length) return new Fraction(integerPart);
     fractionalPart = fractionalPart.slice(
       0,
-      Math.min(fractionalPart.length, Fraction.MAX_DECIMALS)
+      Math.min(fractionalPart.length, Fraction.MAX_DECIMALS) + 1
     );
-
+    const sign = integerPart.startsWith("-") ? -1n : 1n;
     const denominator = 10n ** BigInt(fractionalPart.length);
-    return new Fraction(
-      BigInt(integerPart) * denominator + BigInt(fractionalPart),
-      denominator
-    );
+    const integer = BigInt(integerPart) * denominator;
+    const fractional = BigInt(fractionalPart) * sign;
+    return new Fraction(integer + fractional, denominator);
   }
+
   readonly numerator: bigint;
   readonly denominator: bigint;
 
-  constructor(numerator: TIntegerLike, denominator?: TIntegerLike) {
+  constructor(
+    numerator: TIntegerLike | [bigint, bigint],
+    denominator?: TIntegerLike
+  ) {
+    if (Array.isArray(numerator)) {
+      [numerator, denominator] = numerator;
+    }
     this.numerator = BigInt(numerator);
     this.denominator = BigInt(denominator || 1n);
     if (this.denominator === 0n) throw new Error(FractionError.DivisionByZero);
@@ -69,7 +76,7 @@ export class Fraction {
     return this.lessThan(Fraction.ZERO) ? this.multiply(-1) : this;
   }
 
-  add(rhs: Fraction | TFractionLike): Fraction {
+  add(rhs: TFractionLike): Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator + rhs.numerator * this.denominator,
@@ -78,7 +85,7 @@ export class Fraction {
   }
 
   sub = this.subtract;
-  subtract(rhs: Fraction | TFractionLike): Fraction {
+  subtract(rhs: TFractionLike): Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator - rhs.numerator * this.denominator,
@@ -87,7 +94,7 @@ export class Fraction {
   }
 
   mul = this.multiply;
-  multiply(rhs: Fraction | TFractionLike): Fraction {
+  multiply(rhs: TFractionLike): Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.numerator,
@@ -96,7 +103,7 @@ export class Fraction {
   }
 
   div = this.divide;
-  divide(rhs: Fraction | TFractionLike): Fraction {
+  divide(rhs: TFractionLike): Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator,
@@ -105,19 +112,19 @@ export class Fraction {
   }
 
   lt = this.lessThan;
-  lessThan(rhs: Fraction | TFractionLike): boolean {
+  lessThan(rhs: TFractionLike): boolean {
     rhs = Fraction.asFraction(rhs);
     return this.numerator * rhs.denominator < rhs.numerator * this.denominator;
   }
 
   lte = this.lessThanOrEqual;
-  lessThanOrEqual(rhs: Fraction | TFractionLike): boolean {
+  lessThanOrEqual(rhs: TFractionLike): boolean {
     rhs = Fraction.asFraction(rhs);
     return this.numerator * rhs.denominator <= rhs.numerator * this.denominator;
   }
 
   eq = this.equals;
-  equals(rhs: Fraction | TFractionLike): boolean {
+  equals(rhs: TFractionLike): boolean {
     rhs = Fraction.asFraction(rhs);
     return (
       this.numerator * rhs.denominator === rhs.numerator * this.denominator
@@ -125,13 +132,13 @@ export class Fraction {
   }
 
   gt = this.greaterThan;
-  greaterThan(rhs: Fraction | TFractionLike): boolean {
+  greaterThan(rhs: TFractionLike): boolean {
     rhs = Fraction.asFraction(rhs);
     return this.numerator * rhs.denominator > rhs.numerator * this.denominator;
   }
 
   gte = this.greaterThanOrEqual;
-  greaterThanOrEqual(rhs: Fraction | TFractionLike): boolean {
+  greaterThanOrEqual(rhs: TFractionLike): boolean {
     rhs = Fraction.asFraction(rhs);
     return this.numerator * rhs.denominator >= rhs.numerator * this.denominator;
   }
