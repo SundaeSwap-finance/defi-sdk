@@ -7,9 +7,9 @@
     "url": "https://www.sundaeswap.finance/"
   },
   "bugs": {
-    "url": "https://github.com/SundaeSwap-finance/frontend-configurations/issues"
+    "url": "https://github.com/SundaeSwap-finance/defi-sdk/issues"
   },
-  "homepage": "https://github.com/SundaeSwap-finance/frontend-configurations#readme",
+  "homepage": "https://github.com/SundaeSwap-finance/defi-sdk#readme",
   "workspaces": [
     "packages/*"
   ],
