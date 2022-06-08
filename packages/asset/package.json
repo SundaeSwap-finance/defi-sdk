@@ -1,6 +1,6 @@
 {
   "name": "@sundae/asset",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
@@ -42,6 +42,6 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "@sundae/fraction": "^0.2.0"
+    "@sundae/fraction": "^0.2.1"
   }
 }
