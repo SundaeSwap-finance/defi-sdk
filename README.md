@@ -6,4 +6,4 @@ Monorepo with the following packages:
 - [`@sundae/asset`](./packages/asset/README.md)
 - [`@sundae/fraction`](./packages/fraction/README.md)
 - [`@sundae/cpp`](./packages/cpp/README.md)
-- [`@sundae/cpp`](./packages/json-bigint/README.md)
+- [`@sundae/json-bigint`](./packages/json-bigint/README.md)
