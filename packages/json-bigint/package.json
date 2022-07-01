@@ -26,7 +26,7 @@
     "compile:types": "yarn tsc --outDir dist/types --emitDeclarationOnly --declarationMap --declaration",
     "compile": "yarn compile:cjs && yarn compile:esm && yarn compile:types",
     "build": "yarn clean && yarn compile",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0",
     "lint:fix": "yarn lint -- --fix",
     "clean": "rm -rf ./dist"
