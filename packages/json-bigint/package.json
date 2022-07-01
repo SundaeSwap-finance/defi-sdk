@@ -1,6 +1,6 @@
 {
   "name": "@sundae/json-bigint",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "json-bigint wrapper",
   "repository": "https://github.com/sundaeswap-finance/defi-sdk/tree/master/packages/json-bigint",
   "license": "MIT",

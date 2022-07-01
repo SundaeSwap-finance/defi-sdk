@@ -1,6 +1,6 @@
 {
   "name": "@sundae/cpp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Minimal rational number library using BigInt",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
@@ -42,6 +42,6 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@sundae/fraction": "^0.2.1"
+    "@sundae/fraction": "^0.2.2"
   }
 }
