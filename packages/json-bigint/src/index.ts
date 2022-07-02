@@ -1,6 +1,6 @@
 import JSONBigConstr from "json-bigint";
 
-export const JSONBig = JSONBigConstr;
+export const JSONBig = JSONBigConstr as any;
 
 const JSON = JSONBigConstr({
   useNativeBigInt: true,
