@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.3.1...v0.4.0) (2022-07-05)
+
+
+### Features
+
+* **asset:** add TokenBundle and more methods to AssetAmount ([ba56315](https://github.com/SundaeSwap-finance/defi-sdk/commit/ba56315c39d9efffa5d78ea3ca795ada5c67a6fe))
+
+
+
+
+
 ## [0.3.1](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.3.0...v0.3.1) (2022-07-05)
 
 

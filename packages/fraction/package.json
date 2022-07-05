@@ -1,6 +1,6 @@
 {
   "name": "@sundae/fraction",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Minimal rational number library using BigInt",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
