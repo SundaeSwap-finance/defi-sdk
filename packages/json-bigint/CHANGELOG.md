@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.3.1](https://github.com/sundaeswap-finance/defi-sdk/compare/v0.3.0...v0.3.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* build esm dist correctly ([1fe3975](https://github.com/sundaeswap-finance/defi-sdk/commit/1fe3975ace34900c846fc820f15766706e34351c))
+
+
+
+
+
 # [](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.3.0...v) (2022-07-05)
 
 
@@ -93,6 +109,3 @@
 * **bigint-math:** init package ([de0af5f](https://github.com/SundaeSwap-finance/defi-sdk/commit/de0af5f41f5f9b782b9b2f4a84e2015573707111))
 * **fraction:** init package ([d9124ef](https://github.com/SundaeSwap-finance/defi-sdk/commit/d9124ef091a7b61a8e1bbd0e56cdca342d77a390))
 * setup ci workflow ([af9cd48](https://github.com/SundaeSwap-finance/defi-sdk/commit/af9cd48d434d2d1d71bb0ff529dac23a8788e360))
-
-
-
