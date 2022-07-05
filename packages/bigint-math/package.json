@@ -21,7 +21,7 @@
     "package.json"
   ],
   "scripts": {
-    "compile:esm": "yarn tsc --outDir dist/esm",
+    "compile:esm": "yarn tsc --outDir dist/esm  --module esnext",
     "compile:cjs": "yarn tsc --outDir dist/cjs --module commonjs",
     "compile:types": "yarn tsc --outDir dist/types --emitDeclarationOnly --declarationMap --declaration",
     "compile": "yarn compile:cjs && yarn compile:esm && yarn compile:types",
