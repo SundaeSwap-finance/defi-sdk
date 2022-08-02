@@ -2,10 +2,53 @@ import { Fraction, TFractionLike } from "@sundae/fraction";
 import { sqrt } from "@sundae/bigint-math";
 
 export type TPair = [bigint, bigint];
-// export type TPool = [bigint, bigint, TFractionLike];
 
+/**
+ * Get the lp token amount for a, b
+ * @param a tokenA amount
+ * @param b tokenB amount
+ * @returns the minted lp token amount
+ */
 export const getLp = (a: bigint, b: bigint) => sqrt(a * b);
 
+/**
+ * Get the share ratio as Fraction
+ * @param lp
+ * @param totalLp
+ * @returns
+ */
+export const getShare = (lp: bigint, totalLp: bigint) =>
+  new Fraction(lp, totalLp);
+
+/**
+ * Calculate the Add (Mixed-Deposit) Liquidity parameters
+ * @param a the a amount
+ * @param aReserve the pool's reserveA amount
+ * @param bReserve the pool's reserveB amount
+ * @param totalLp the pool's total minted lp currently
+ * @returns the needed b, minted lp amounts, next total lp amount and share fraction
+ */
+export const addLiquidity = (
+  a: bigint,
+  aReserve: bigint,
+  bReserve: bigint,
+  totalLp: bigint
+) => {
+  const nextTotalLp = new Fraction(totalLp * (a + aReserve), aReserve).quotient;
+  const lp = nextTotalLp - totalLp;
+  const b = new Fraction(bReserve * a, aReserve).quotient;
+  const share = getShare(lp, totalLp);
+  return { nextTotalLp, lp, b, share };
+};
+
+/**
+ * Get the token amounts the given lp represents
+ * @param lp the lp amount
+ * @param aReserve the pool's reserveA amount
+ * @param bReserve the pool's reserveB amount
+ * @param totalLp the pool's total minted lp currently
+ * @returns [a, b] token amounts
+ */
 export const getTokensForLp = (
   lp: bigint,
   aReserve: bigint,
