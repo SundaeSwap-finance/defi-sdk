@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.4.1...v0.5.0) (2022-08-02)
+
+
+### Features
+
+* **cpp:** add `addLiquidity` and `getShare` fns ([035c9b6](https://github.com/SundaeSwap-finance/defi-sdk/commit/035c9b6ac791d06fdb965b46b6734e005ed93a8e))
+
+
+
+
+
 ## [0.4.1](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.4.0...v0.4.1) (2022-07-10)
 
 
