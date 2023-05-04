@@ -46,22 +46,24 @@ export class Fraction {
   static parseString(fractionString: string): Fraction {
     // Parse a number in various forms (1000, 1.0003, 1.23e4, 1.23e-4) into a numerator and denominator
     fractionString = fractionString.replace(/,/g, "");
-    
+
     if (fractionString.match(/[eE]/)) {
       const [base, exponent] = fractionString.split(/[eE]/).map(Number);
       const exponentBig = BigInt(Math.abs(exponent));
       const scale = 10n ** exponentBig;
       const baseFraction = this.parseString(base.toString());
-      return exponent > 0 ? baseFraction.multiply(scale) : baseFraction.divide(scale);
+      return exponent > 0
+        ? baseFraction.multiply(scale)
+        : baseFraction.divide(scale);
     }
 
-    if (fractionString.includes('.')) {
-      const [integerPart, fractionalPart] = fractionString.split('.');
+    if (fractionString.includes(".")) {
+      const [integerPart, fractionalPart] = fractionString.split(".");
       const numerator = BigInt(integerPart + fractionalPart);
       const denominator = 10n ** BigInt(fractionalPart.length);
 
       // Simplify the fraction using the GCD function
-      const gcd = (a,b) => b === 0n ? a : gcd(b, a % b);
+      const gcd = (a, b) => (b === 0n ? a : gcd(b, a % b));
       const divisor = gcd(numerator, denominator);
       return new Fraction(numerator / divisor, denominator / divisor);
     }
