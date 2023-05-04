@@ -53,6 +53,10 @@ describe("Fraction", () => {
     expect(Fraction.parseString("0").eq(Fraction.ZERO)).toBe(true);
     expect(Fraction.parseString("1").eq(Fraction.ONE)).toBe(true);
     expect(Fraction.parseString("1000").eq(Fraction.THOUSAND)).toBe(true);
+    expect(Fraction.parseString("1e3").eq(Fraction.THOUSAND)).toBe(true);
+    expect(Fraction.parseString("1.3e3").eq(new Fraction(1300, 1))).toBe(true);
+    expect(Fraction.parseString("1.3e-3").eq(new Fraction(13, 10000))).toBe(true);
+    expect(Fraction.parseString("1.890094141e-8").eq(new Fraction(1890094141n, 100000000000000000n))).toBe(true);
   });
 
   test(".asFraction", () => {
