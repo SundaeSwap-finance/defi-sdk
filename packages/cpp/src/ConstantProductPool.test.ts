@@ -21,6 +21,11 @@ describe("getSwapOutput", () => {
     ).toThrow();
   });
 
+  test("rounds up for non-fractional assets", () => {
+    expect(getSwapOutput(83n, 10000n, 500n, threePct).output).toEqual(3n);
+    expect(getSwapOutput(83n, 10000n, 500n, threePct, true).output).toEqual(4n);
+  });
+
   describe("correct output, next state and fee collected", () => {
     test.each([
       [1n, [1n, 1n], zeroPct, 0n, [2n, 1n], 0n],
