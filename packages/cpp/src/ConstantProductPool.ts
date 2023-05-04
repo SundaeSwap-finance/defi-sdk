@@ -83,7 +83,8 @@ export const getSwapOutput = (
   input: bigint,
   inputReserve: bigint,
   outputReserve: bigint,
-  fee: TFractionLike
+  fee: TFractionLike,
+  roundOutputUp?: boolean
 ): TSwapOutcome => {
   if (input <= 0 || inputReserve <= 0 || outputReserve <= 0)
     throw new Error("Input and reserves must be positive");
@@ -96,13 +97,23 @@ export const getSwapOutput = (
   const output = new Fraction(
     outputReserve * input * feeDiff,
     inputReserve * fee.denominator + input * feeDiff
-  ).quotient;
+  );
+
+  const safeOutput = roundOutputUp
+    ? BigInt(Math.ceil(output.toNumber()))
+    : output.quotient;
 
   const inputLpFee = new Fraction(input * fee.numerator, fee.denominator)
     .quotient;
   const nextInputReserve = inputReserve + input;
-  const nextOutputReserve = outputReserve - output;
-  return { input, output, inputLpFee, nextInputReserve, nextOutputReserve };
+  const nextOutputReserve = outputReserve - safeOutput;
+  return {
+    input,
+    output: safeOutput,
+    inputLpFee,
+    nextInputReserve,
+    nextOutputReserve,
+  };
 };
 
 /**
