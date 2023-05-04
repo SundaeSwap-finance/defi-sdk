@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.0...v0.5.2) (2023-05-04)
+
+**Note:** Version bump only for package defi-sdk
+
+
+
+
+
 ## [0.5.1](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.0...v0.5.1) (2023-05-04)
 
 **Note:** Version bump only for package defi-sdk
