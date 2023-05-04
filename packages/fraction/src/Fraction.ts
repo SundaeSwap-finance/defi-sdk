@@ -44,17 +44,29 @@ export class Fraction {
   // }
 
   static parseString(fractionString: string): Fraction {
-    let [integerPart, fractionalPart] = fractionString.split(".");
-    if (!fractionalPart?.length) return new Fraction(integerPart);
-    fractionalPart = fractionalPart.slice(
-      0,
-      Math.min(fractionalPart.length, Fraction.MAX_DECIMALS) + 1
-    );
-    const sign = integerPart.startsWith("-") ? -1n : 1n;
-    const denominator = 10n ** BigInt(fractionalPart.length);
-    const integer = BigInt(integerPart) * denominator;
-    const fractional = BigInt(fractionalPart) * sign;
-    return new Fraction(integer + fractional, denominator);
+    // Parse a number in various forms (1000, 1.0003, 1.23e4, 1.23e-4) into a numerator and denominator
+    fractionString = fractionString.replace(/,/g, "");
+    
+    if (fractionString.match(/[eE]/)) {
+      const [base, exponent] = fractionString.split(/[eE]/).map(Number);
+      const exponentBig = BigInt(Math.abs(exponent));
+      const scale = 10n ** exponentBig;
+      const baseFraction = this.parseString(base.toString());
+      return exponent > 0 ? baseFraction.multiply(scale) : baseFraction.divide(scale);
+    }
+
+    if (fractionString.includes('.')) {
+      const [integerPart, fractionalPart] = fractionString.split('.');
+      const numerator = BigInt(integerPart + fractionalPart);
+      const denominator = 10n ** BigInt(fractionalPart.length);
+
+      // Simplify the fraction using the GCD function
+      const gcd = (a,b) => b === 0n ? a : gcd(b, a % b);
+      const divisor = gcd(numerator, denominator);
+      return new Fraction(numerator / divisor, denominator / divisor);
+    }
+
+    return new Fraction(fractionString);
   }
 
   readonly numerator: bigint;
