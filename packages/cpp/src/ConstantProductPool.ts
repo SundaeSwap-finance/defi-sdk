@@ -65,6 +65,7 @@ export type TSwapOutcome = {
   inputLpFee: bigint;
   nextInputReserve: bigint;
   nextOutputReserve: bigint;
+  priceImpact: Fraction;
 };
 
 /**
@@ -93,7 +94,7 @@ export const getSwapOutput = (
   if (fee.lt(Fraction.ZERO) || fee.gte(Fraction.ONE))
     throw new Error("fee must be [0,1)");
 
-  const feeDiff = fee.denominator - fee.numerator;
+  const feeDiff = BigInt(fee.denominator - fee.numerator);
   const output = new Fraction(
     outputReserve * input * feeDiff,
     inputReserve * fee.denominator + input * feeDiff
@@ -107,12 +108,24 @@ export const getSwapOutput = (
     .quotient;
   const nextInputReserve = inputReserve + input;
   const nextOutputReserve = outputReserve - safeOutput;
+
+  // PRICEIMPACT: "priceImpact" is slightly misleadingly named in the industry as a whole
+  // just by it's name, it would imply that it's the percentage difference between
+  // the current price and the price after the swap, but it's actually the percentage
+  // difference between the real price of your swap, and the price implied by the current
+  // reserves; We got this wrong in v1, but this aligns it with the industry standard
+  // Source: https://dailydefi.org/articles/price-impact-and-how-to-calculate/
+  const amountInLessFee = input - inputLpFee;
+  const idealPrice = new Fraction(inputReserve, outputReserve);
+  const actualPrice = new Fraction(amountInLessFee, safeOutput);
+  const priceImpact = Fraction.ONE.subtract(idealPrice.divide(actualPrice));
   return {
     input,
     output: safeOutput,
     inputLpFee,
     nextInputReserve,
     nextOutputReserve,
+    priceImpact,
   };
 };
 
@@ -145,7 +158,7 @@ export const getSwapInput = (
   if (fee.lt(Fraction.ZERO) || fee.gte(Fraction.ONE))
     throw new Error("fee must be [0,1)");
 
-  const feeDiff = fee.denominator - fee.numerator;
+  const feeDiff = BigInt(fee.denominator - fee.numerator);
   const input =
     new Fraction(
       inputReserve * output * fee.denominator,
@@ -156,5 +169,12 @@ export const getSwapInput = (
     .quotient;
   const nextInputReserve = inputReserve + input;
   const nextOutputReserve = outputReserve - output;
-  return { input, output, inputLpFee, nextInputReserve, nextOutputReserve };
+
+  // See PRICEIMPACT
+  const amountInLessFee = input - inputLpFee;
+  const idealPrice = new Fraction(inputReserve, outputReserve);
+  const actualPrice = new Fraction(amountInLessFee, output);
+  const priceImpact = Fraction.ONE.subtract(idealPrice.divide(actualPrice));
+
+  return { input, output, inputLpFee, nextInputReserve, nextOutputReserve, priceImpact };
 };
