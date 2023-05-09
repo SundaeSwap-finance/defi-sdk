@@ -28,7 +28,7 @@ jobs:
 
       # Install dependencies
       - name: Install
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: yarn install --frozen-lockfile --ignore-scripts && yarn bootstrap
 
       # Lint the files
       - name: Lint
