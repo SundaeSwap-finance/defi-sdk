@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.6](https://github.com/sundaeswap-finance/defi-sdk/compare/v0.5.4...v0.5.6) (2023-05-09)
+
+
+### Bug Fixes
+
+* lint ([1a56be7](https://github.com/sundaeswap-finance/defi-sdk/commit/1a56be7d2e541a464dd77512004d120a14b01d4a))
+
+
+
+
+
 # [0.5.0](https://github.com/sundaeswap-finance/defi-sdk/compare/v0.4.1...v0.5.0) (2022-08-02)
 
 **Note:** Version bump only for package @sundae/json-bigint
