@@ -20,6 +20,9 @@
     "src",
     "package.json"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "compile:esm": "yarn tsc --outDir dist/esm  --module esnext",
     "compile:cjs": "yarn tsc --outDir dist/cjs --module commonjs",
