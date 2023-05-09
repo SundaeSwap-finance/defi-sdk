@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "useWorkspaces": false,
   "npmClient": "yarn",
   "ignoreChanges": [
@@ -17,5 +15,5 @@
       "private": false
     }
   },
-  "version": "0.5.8"
+  "version": "0.5.9"
 }
