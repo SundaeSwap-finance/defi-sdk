@@ -1,5 +1,6 @@
 import JSONBigConstr from "json-bigint";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const JSONBig = JSONBigConstr as any;
 
 const sharedProps: Parameters<typeof JSONBigConstr>[0] = {
