@@ -162,9 +162,9 @@ describe("getSwapOutput", () => {
       },
     ] as { input: bigint; inReserve: TPair; fee: TFractionLike; out: bigint; outReserve: TPair; lpFee: bigint; impact: TFractionLike }[])(
       "%# input %d; pool %p; fee %d => output %o; nextPool %p; fee: %d; impact %d",
-      ({ input, inReserve, fee, outReserve, lpFee, impact }) => {
+      ({ input, inReserve, fee, out, outReserve, lpFee, impact }) => {
         const actual = getSwapOutput(input, ...inReserve, fee);
-        expect(actual.output).toBe(outReserve);
+        expect(actual.output).toBe(out);
         expect(actual.inputLpFee).toBe(lpFee);
         expect(actual.nextInputReserve).toBe(outReserve[0]);
         expect(actual.nextInputReserve).toBe(input + inReserve[0]);
