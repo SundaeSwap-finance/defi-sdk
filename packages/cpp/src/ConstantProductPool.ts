@@ -1,5 +1,5 @@
-import { Fraction, TFractionLike } from "@sundae/fraction";
-import { sqrt } from "@sundae/bigint-math";
+import { Fraction, TFractionLike } from "@sundaeswap/fraction";
+import { sqrt } from "@sundaeswap/bigint-math";
 
 export type TPair = [bigint, bigint];
 

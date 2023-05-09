@@ -1,4 +1,4 @@
-import { Fraction, TFractionLike } from "@sundae/fraction";
+import { Fraction, TFractionLike } from "@sundaeswap/fraction";
 import { getSwapOutput, getSwapInput, TPair } from "./ConstantProductPool";
 
 describe("getSwapOutput", () => {

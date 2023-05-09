@@ -1,4 +1,4 @@
-import { Fraction, TFractionLike, TIntegerLike } from "@sundae/fraction";
+import { Fraction, TFractionLike, TIntegerLike } from "@sundaeswap/fraction";
 import { IHasStringId, stringIdEquals, TFungibleToken } from "./Asset";
 
 /**
