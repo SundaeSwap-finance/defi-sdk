@@ -5,7 +5,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.5.4](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.2...v0.5.4) (2023-05-04)
 
-**Note:** Version bump only for package @sundae/fraction
+**Note:** Version bump only for package @sundaeswap/fraction
 
 
 
@@ -13,7 +13,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.5.3](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.2...v0.5.3) (2023-05-04)
 
-**Note:** Version bump only for package @sundae/fraction
+**Note:** Version bump only for package @sundaeswap/fraction
 
 
 
@@ -21,7 +21,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.5.0](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.4.1...v0.5.0) (2022-08-02)
 
-**Note:** Version bump only for package @sundae/fraction
+**Note:** Version bump only for package @sundaeswap/fraction
 
 
 
@@ -29,7 +29,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.4.0](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.3.1...v0.4.0) (2022-07-05)
 
-**Note:** Version bump only for package @sundae/fraction
+**Note:** Version bump only for package @sundaeswap/fraction
 
 
 

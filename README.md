@@ -2,8 +2,8 @@
 
 Monorepo with the following packages:
 
-- [`@sundae/asset`](./packages/asset/)
-- [`@sundae/bigint-math`](./packages/bigint-math/)
-- [`@sundae/cpp`](./packages/cpp/)
-- [`@sundae/fraction`](./packages/fraction/)
-- [`@sundae/json-bigint`](./packages/json-bigint/)
+- [`@sundaeswap/asset`](./packages/asset/)
+- [`@sundaeswap/bigint-math`](./packages/bigint-math/)
+- [`@sundaeswap/cpp`](./packages/cpp/)
+- [`@sundaeswap/fraction`](./packages/fraction/)
+- [`@sundaeswap/json-bigint`](./packages/json-bigint/)

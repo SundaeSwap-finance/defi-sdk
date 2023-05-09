@@ -1,8 +1,6 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "useWorkspaces": true,
+  "packages": ["packages/*"],
+  "useWorkspaces": false,
   "npmClient": "yarn",
   "ignoreChanges": [
     "**/__tests__/**",
@@ -13,10 +11,8 @@
   "command": {
     "version": {
       "message": "chore(release): publish %s",
-      "conventionalCommits": true
-    },
-    "publish": {
-      "registry": "https://sundae-320450105600.d.codeartifact.us-east-2.amazonaws.com/npm/ui/"
+      "conventionalCommits": true,
+      "private": false
     }
   },
   "version": "0.5.6"

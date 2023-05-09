@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "defi-sdk",
   "description": "",
   "author": {
@@ -10,9 +10,6 @@
     "url": "https://github.com/SundaeSwap-finance/defi-sdk/issues"
   },
   "homepage": "https://github.com/SundaeSwap-finance/defi-sdk#readme",
-  "workspaces": [
-    "packages/*"
-  ],
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "yarn lint --fix"
   },
@@ -21,12 +18,13 @@
     "lint:fix": "yarn lint --fix",
     "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
-    "build": "lerna run build --scope '@sundae/*'",
-    "test": "lerna run test --stream --scope '@sundae/*'",
+    "build": "lerna run build --scope '@sundaeswap/*'",
+    "test": "lerna run test --stream --scope '@sundaeswap/*'",
     "bump": "lerna version patch --no-git-tag-version --yes",
-    "preinstall": "node tools/preinstall.ts && aws codeartifact login --tool npm --repository ui --domain sundae --domain-owner 320450105600 --namespace @sundae",
+    "postinstall": "yarn bootstrap",
+    "preinstall": "node tools/preinstall.ts",
     "prepare": "husky install",
-    "version:ci": "lerna version --conventional-commits --create-release github -y",
+    "version:ci": "lerna version -y --ignore-scripts",
     "publish:ci": "lerna publish from-package -y",
     "release": "yarn build && lerna publish from-package -y",
     "canary": "lerna publish from-package -y --canary",
@@ -34,12 +32,12 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
-    "@sundae/eslint-config": "^1.6.0",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.1",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-prettier": "^4.2.1",

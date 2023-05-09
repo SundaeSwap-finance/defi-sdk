@@ -1,12 +1,12 @@
 {
-  "name": "@sundae/asset",
+  "name": "@sundaeswap/asset",
   "version": "0.5.4",
   "description": "",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
     "url": "https://www.sundaeswap.finance/"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "sideEffects": false,
   "exports": {
     ".": {
@@ -42,6 +42,6 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@sundae/fraction": "^0.5.4"
+    "@sundaeswap/fraction": "^0.5.4"
   }
 }
