@@ -1,60 +1,48 @@
-name: CI
+name: CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
 
 permissions:
-  id-token: write # required to use OIDC authentication
-  contents: write # to push tags and commits
+  id-token: write
+  contents: write
 
 jobs:
-  CI:
-    # strategy:
-    #   matrix:
-    #     os: [ubuntu-latest, macos-latest]
-    # runs-on: ${{ matrix.os }}
+  # Build
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository code
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: "0"
 
-      - uses: actions/setup-node@v3
+      - name: Setting up Node.js 16.x
+        uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: "https://registry.npmjs.org"
+          scope: "@sundaeswap"
+          cache: yarn
 
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::320450105600:role/GitHubActionRole
-          role-duration-seconds: 900 # the ttl of the session, in seconds.
-          aws-region: us-east-2 # use your region here.
+      # Install dependencies
+      - name: Install
+        run: yarn install --frozen-lockfile --ignore-scripts
 
-      - name: CodeArtifact login
-        run: aws codeartifact login --tool npm --repository ui --domain sundae --domain-owner 320450105600
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Lerna bootstrap
-        run: yarn bootstrap
-
+      # Lint the files
       - name: Lint
         run: yarn lint
 
-      - name: Type Check
-        run: yarn typecheck
-
+      # Build artifacts
       - name: Build
         run: yarn build
 
-      - name: Test
+      # Run Tests
+      - name: Run Tests
         run: yarn test
 
+      # Git Identity
       - name: Git Identity
         run: |
           git config --global user.name '🤖github-actions🍦'
@@ -63,10 +51,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Bump Versions
       - name: Bump versions
         run: yarn version:ci
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish packages
+      # Create Release
+      - name: Publish
         run: yarn publish:ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}

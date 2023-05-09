@@ -1,5 +1,5 @@
 {
-  "name": "@sundae/bigint-math",
+  "name": "@sundaeswap/bigint-math",
   "version": "0.5.0",
   "description": "Minimal BigIntMath library",
   "repository": "https://github.com/sundaeswap-finance/defi-sdk/tree/master/packages/bigint-math",

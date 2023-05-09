@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "outDir": "./dist/",
     "paths": {
-      "@sundae/*": [
+      "@sundaeswap/*": [
         "packages/*/src"
       ]
     }
