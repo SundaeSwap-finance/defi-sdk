@@ -29,36 +29,36 @@ describe("getSwapOutput", () => {
 
   describe("correct output, next state and fee collected", () => {
     test.each([
-      // Ideal pool
-      [1n, [1n, 1n], zeroPct, 0n, [2n, 1n], 0n, 0],
-      [1n, [1n, 2n], zeroPct, 1n, [2n, 1n], 0n, 0.5],
-      [100n, [1n, 2n], zeroPct, 1n, [101n, 1n], 0n, 0.995],
-      [100n, [1n, 100n], zeroPct, 99n, [101n, 1n], 0n, 0.9901],
-      [100n, [100n, 100n], zeroPct, 50n, [200n, 50n], 0n, 0.5],
-      [50n, [100n, 100n], zeroPct, 33n, [150n, 67n], 0n, 0.34],
+      // Ideal, 0% pool
+      {input: 1n, inReserve: [1n, 1n], fee: zeroPct, out: 0n, outReserve: [2n, 1n], lpFee: 0n, impact: 0 },
+      {input: 1n, inReserve: [1n, 2n], fee: zeroPct, out: 1n, outReserve: [2n, 1n], lpFee: 0n, impact: 0.5 },
+      {input: 100n, inReserve: [1n, 2n], fee: zeroPct, out: 1n, outReserve: [101n, 1n], lpFee: 0n, impact: 0.995 },
+      {input: 100n, inReserve: [1n, 100n], fee: zeroPct, out: 99n, outReserve: [101n, 1n], lpFee: 0n, impact: 0.9901 },
+      {input: 100n, inReserve: [100n, 100n], fee: zeroPct, out: 50n, outReserve: [200n, 50n], lpFee: 0n, impact: 0.5 },
+      {input: 50n, inReserve: [100n, 100n], fee: zeroPct, out: 33n, outReserve: [150n, 67n], lpFee: 0n, impact: 0.34 },
 
-      // With fee
-      [1n, [1n, 1n], threePct, 0n, [2n, 1n], 0n, 0],
-      [1n, [1n, 2n], threePct, 0n, [2n, 2n], 0n, 0.5],
-      [1n, [1n, 3n], threePct, 1n, [2n, 2n], 0n, new Fraction(2, 3)],
-      [100n, [1n, 2n], threePct, 1n, [101n, 1n], 3n, new Fraction(193, 194)],
-      [100n, [1n, 100n], threePct, 98n, [101n, 2n], 3n, new Fraction(9602, 9700)],
-      [100n, [100n, 100n], threePct, 49n, [200n, 51n], 3n, new Fraction(4800, 9700)],
-      [50n, [100n, 100n], threePct, 32n, [150n, 68n], 1n, new Fraction(1700, 4900)],
+      // Simple boundary cases
+      {input: 1n, inReserve: [1n, 1n], fee: threePct, out: 0n, outReserve: [2n, 1n], lpFee: 0n, impact: 0 },
+      {input: 1n, inReserve: [1n, 2n], fee: threePct, out: 0n, outReserve: [2n, 2n], lpFee: 0n, impact: 0.5 },
+      {input: 1n, inReserve: [1n, 3n], fee: threePct, out: 1n, outReserve: [2n, 2n], lpFee: 0n, impact: new Fraction(2, 3) },
+      {input: 100n, inReserve: [1n, 2n], fee: threePct, out: 1n, outReserve: [101n, 1n], lpFee: 3n, impact: new Fraction(193, 194) },
+      {input: 100n, inReserve: [1n, 100n], fee: threePct, out: 98n, outReserve: [101n, 2n], lpFee: 3n, impact: new Fraction(9602, 9700) },
+      {input: 100n, inReserve: [100n, 100n], fee: threePct, out: 49n, outReserve: [200n, 51n], lpFee: 3n, impact: new Fraction(4800, 9700) },
+      {input: 50n, inReserve: [100n, 100n], fee: threePct, out: 32n, outReserve: [150n, 68n], lpFee: 1n, impact: new Fraction(1700, 4900) },
       
       // Real world examples
-      [1291591603n, [5753371381n, 672426600000n], onePct, 122271016729n, [7044962984n, 550155583271n], 12915916n, new Fraction(156344976337673367251n, 859815544712074200000n)],
-    ] as [bigint, TPair, TFractionLike, bigint, TPair, bigint, TFractionLike][])(
+      {input: 1291591603n, inReserve: [5753371381n, 672426600000n], fee: onePct, out: 122271016729n, outReserve: [7044962984n, 550155583271n], lpFee: 12915916n, impact: new Fraction(156344976337673367251n, 859815544712074200000n) },
+    ] as {input: bigint, inReserve: TPair, fee: TFractionLike, out: bigint, outReserve: TPair, lpFee: bigint, impact: TFractionLike}[])(
       "%# input %d; pool %p; fee %d => output %o; nextPool %p; fee: %d; impact %d",
-      (input, pool, fee, output, nextPool, lpFee, priceImpact) => {
-        const actual = getSwapOutput(input, ...pool, fee);
-        expect(actual.output).toBe(output);
+      ({input, inReserve, fee, out, outReserve, lpFee, impact}) => {
+        const actual = getSwapOutput(input, ...inReserve, fee);
+        expect(actual.output).toBe(outReserve);
         expect(actual.inputLpFee).toBe(lpFee);
-        expect(actual.nextInputReserve).toBe(nextPool[0]);
-        expect(actual.nextInputReserve).toBe(input + pool[0]);
-        expect(actual.nextOutputReserve).toBe(nextPool[1]);
-        expect(actual.nextOutputReserve + actual.output).toBe(pool[1]);
-        expect(actual.priceImpact.eq(priceImpact)).toBe(true);
+        expect(actual.nextInputReserve).toBe(outReserve[0]);
+        expect(actual.nextInputReserve).toBe(input + inReserve[0]);
+        expect(actual.nextOutputReserve).toBe(outReserve[1]);
+        expect(actual.nextOutputReserve + actual.output).toBe(inReserve[1]);
+        expect(actual.priceImpact.eq(impact)).toBe(true);
       }
     );
   });
@@ -95,26 +95,28 @@ describe("getSwapInput", () => {
 
   describe("correct input, next state and fee collected", () => {
     test.each([
-      [1n, [1n, 2n], zeroPct, new Fraction(3n, 4n)],
-      [100n, [1n, 2n], zeroPct, new Fraction(3n, 4n)],
-      [100n, [1n, 100n], zeroPct, new Fraction(9901n, 10000n)],
-      [100n, [100n, 100n], zeroPct, new Fraction(5100n, 10100n)],
-      [50n, [100n, 100n], zeroPct, new Fraction(1700n, 5000n)],
+      // Ideal 0% fee pool
+      { input: 1n, inReserve: [1n, 2n], fee: zeroPct, impact: new Fraction(3n, 4n) },
+      { input: 100n, inReserve: [1n, 2n], fee: zeroPct, impact: new Fraction(3n, 4n) },
+      { input: 100n, inReserve: [1n, 100n], fee: zeroPct, impact: new Fraction(9901n, 10000n) },
+      { input: 100n, inReserve: [100n, 100n], fee: zeroPct, impact: new Fraction(5100n, 10100n) },
+      { input: 50n, inReserve: [100n, 100n], fee: zeroPct, impact: new Fraction(1700n, 5000n) },
 
-      [1n, [1n, 3n], threePct, new Fraction(2n, 3n)],
-      [100n, [1n, 2n], threePct, new Fraction(3n, 4n)],
-      [100n, [1n, 100n], threePct, new Fraction(4902n, 5000n)],
-      [100n, [100n, 100n], threePct, new Fraction(4800n, 9700n)],
-      [50n, [100n, 100n], threePct, new Fraction(1600n, 4800n)],
+      // Simple boundary cases
+      { input: 1n, inReserve: [1n, 3n], fee: threePct, impact: new Fraction(2n, 3n) },
+      { input: 100n, inReserve: [1n, 2n], fee: threePct, impact: new Fraction(3n, 4n) },
+      { input: 100n, inReserve: [1n, 100n], fee: threePct, impact: new Fraction(4902n, 5000n) },
+      { input: 100n, inReserve: [100n, 100n], fee: threePct, impact: new Fraction(4800n, 9700n) },
+      { input: 50n, inReserve: [100n, 100n], fee: threePct, impact: new Fraction(1600n, 4800n) },
 
       // Real world examples
-      [1291591603n, [5753371381n, 672426600000n], onePct, new Fraction(156344976337673367251n, 859815544712074200000n)],
-    ] as [bigint, TPair, TFractionLike, TFractionLike][])(
+      { input: 1291591603n, inReserve: [5753371381n, 672426600000n], fee: onePct, impact: new Fraction(156344976337673367251n, 859815544712074200000n) },
+    ] as { input: bigint, inReserve: TPair, fee: TFractionLike, impact: TFractionLike }[])(
       "%# input %d; pool %p; fee %d; impact %d",
-      (input, pool, fee, priceImpact) => {
-        const outcome = getSwapOutput(input, ...pool, fee);
-        const actual = getSwapInput(outcome.output, ...pool, fee);
-        const outcomeForActual = getSwapOutput(actual.input, ...pool, fee);
+      ({ input, inReserve, fee, impact }) => {
+        const outcome = getSwapOutput(input, ...inReserve, fee);
+        const actual = getSwapInput(outcome.output, ...inReserve, fee);
+        const outcomeForActual = getSwapOutput(actual.input, ...inReserve, fee);
         expect(outcome.output).toBe(outcomeForActual.output);
         expect(actual.inputLpFee).toBe(outcomeForActual.inputLpFee);
         expect(actual.nextInputReserve).toBe(outcomeForActual.nextInputReserve);
@@ -122,7 +124,7 @@ describe("getSwapInput", () => {
           outcomeForActual.nextOutputReserve
         );
         expect(actual.priceImpact).toEqual(outcomeForActual.priceImpact);
-        expect(actual.priceImpact.eq(priceImpact)).toBe(true);
+        expect(actual.priceImpact.eq(impact)).toBe(true);
       }
     );
   });
