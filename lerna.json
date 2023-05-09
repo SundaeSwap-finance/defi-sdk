@@ -11,7 +11,8 @@
   "command": {
     "version": {
       "message": "chore(release): publish %s",
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "private": false
     }
   },
   "version": "0.5.6"
