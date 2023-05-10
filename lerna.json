@@ -1,4 +1,5 @@
 {
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "packages": ["packages/*"],
   "useWorkspaces": false,
   "npmClient": "yarn",
@@ -15,5 +16,6 @@
       "private": false
     }
   },
-  "version": "0.5.9"
+  "version": "independent",
+  "useNx": false
 }

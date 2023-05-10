@@ -22,13 +22,22 @@ export const getShare = (lp: bigint, totalLp: bigint) =>
 
 /**
  * Calculate the Add (Mixed-Deposit) Liquidity parameters
- * @param a the a amount
- * @param aReserve the pool's reserveA amount
- * @param bReserve the pool's reserveB amount
- * @param totalLp the pool's total minted lp currently
- * @returns the needed b, minted lp amounts, next total lp amount and share fraction
+ *
+ * @param {bigint} a - The amount of token A to add.
+ * @param {bigint} aReserve - The current reserve of token A in the pool.
+ * @param {bigint} bReserve - The current reserve of token B in the pool.
+ * @param {bigint} totalLp - The total liquidity in the pool before adding.
+ * @throws {Error} If the provided 'a' asset is not enough to equal at least 1 of the 'b' asset.
+ * @returns {Object} An object containing:
+ *   - nextTotalLp: The total liquidity in the pool after adding.
+ *   - lp: The liquidity provided by the 'a' token. (Deprecated)
+ *   - generatedLp: The liquidity provided by the 'a' token.
+ *   - b: The amount of token 'b' that matches the provided 'a' token. (Deprecated)
+ *   - requiredB: The amount of token 'b' that matches the provided 'a' token.
+ *   - share: The share of the pool after adding 'a'. (Deprecated)
+ *   - shareAfterDeposit: The share of the pool after adding 'a'.
  */
-export const addLiquidity = (
+export const calculateLiquidity = (
   a: bigint,
   aReserve: bigint,
   bReserve: bigint,
@@ -36,10 +45,35 @@ export const addLiquidity = (
 ) => {
   const nextTotalLp = new Fraction(totalLp * (a + aReserve), aReserve).quotient;
   const lp = nextTotalLp - totalLp;
-  const b = new Fraction(bReserve * a, aReserve).quotient;
-  const share = getShare(lp, totalLp);
-  return { nextTotalLp, lp, b, share };
+  const b = new Fraction(bReserve * a, aReserve);
+  const share = getShare(lp, nextTotalLp);
+
+  if (b.quotient === 0n) {
+    throw new Error(
+      "The provided a asset is not enough to equal at least 1 of the b asset."
+    );
+  }
+
+  return {
+    nextTotalLp,
+    /** @deprecated */
+    lp,
+    generatedLp: lp,
+    /** @deprecated */
+    b: b.quotient,
+    requiredB: b.quotient,
+    /** @deprecated */
+    share,
+    shareAfterDeposit: share,
+  };
 };
+
+/**
+ * @deprecated
+ *
+ * Use {@link calculateLiquidity} instead.
+ */
+export const addLiquidity = calculateLiquidity;
 
 /**
  * Get the token amounts the given lp represents

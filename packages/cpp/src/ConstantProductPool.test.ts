@@ -1,5 +1,7 @@
 import { Fraction, TFractionLike } from "@sundaeswap/fraction";
 import { getSwapOutput, getSwapInput, TPair } from "./ConstantProductPool";
+import { getLp } from "./ConstantProductPool";
+import { calculateLiquidity } from "./ConstantProductPool";
 
 describe("getSwapOutput", () => {
   const threePct = new Fraction(3, 100);
@@ -210,31 +212,31 @@ describe("getSwapInput", () => {
       // Ideal 0% fee pool
       {
         input: 1n,
-        inReserve: [1n, 2n],
+        reserves: [1n, 2n],
         fee: zeroPct,
         impact: new Fraction(3n, 4n),
       },
       {
         input: 100n,
-        inReserve: [1n, 2n],
+        reserves: [1n, 2n],
         fee: zeroPct,
         impact: new Fraction(3n, 4n),
       },
       {
         input: 100n,
-        inReserve: [1n, 100n],
+        reserves: [1n, 100n],
         fee: zeroPct,
         impact: new Fraction(9901n, 10000n),
       },
       {
         input: 100n,
-        inReserve: [100n, 100n],
+        reserves: [100n, 100n],
         fee: zeroPct,
         impact: new Fraction(5100n, 10100n),
       },
       {
         input: 50n,
-        inReserve: [100n, 100n],
+        reserves: [100n, 100n],
         fee: zeroPct,
         impact: new Fraction(1700n, 5000n),
       },
@@ -242,31 +244,31 @@ describe("getSwapInput", () => {
       // Simple boundary cases
       {
         input: 1n,
-        inReserve: [1n, 3n],
+        reserves: [1n, 3n],
         fee: threePct,
         impact: new Fraction(2n, 3n),
       },
       {
         input: 100n,
-        inReserve: [1n, 2n],
+        reserves: [1n, 2n],
         fee: threePct,
         impact: new Fraction(3n, 4n),
       },
       {
         input: 100n,
-        inReserve: [1n, 100n],
+        reserves: [1n, 100n],
         fee: threePct,
         impact: new Fraction(4902n, 5000n),
       },
       {
         input: 100n,
-        inReserve: [100n, 100n],
+        reserves: [100n, 100n],
         fee: threePct,
         impact: new Fraction(4800n, 9700n),
       },
       {
         input: 50n,
-        inReserve: [100n, 100n],
+        reserves: [100n, 100n],
         fee: threePct,
         impact: new Fraction(1600n, 4800n),
       },
@@ -274,16 +276,16 @@ describe("getSwapInput", () => {
       // Real world examples
       {
         input: 1291591603n,
-        inReserve: [5753371381n, 672426600000n],
+        reserves: [5753371381n, 672426600000n],
         fee: onePct,
         impact: new Fraction(156344976337673367251n, 859815544712074200000n),
       },
-    ] as { input: bigint; inReserve: TPair; fee: TFractionLike; impact: TFractionLike }[])(
+    ] as { input: bigint; reserves: TPair; fee: TFractionLike; impact: TFractionLike }[])(
       "%# input %d; pool %p; fee %d; impact %d",
-      ({ input, inReserve, fee, impact }) => {
-        const outcome = getSwapOutput(input, ...inReserve, fee);
-        const actual = getSwapInput(outcome.output, ...inReserve, fee);
-        const outcomeForActual = getSwapOutput(actual.input, ...inReserve, fee);
+      ({ input, reserves, fee, impact }) => {
+        const outcome = getSwapOutput(input, ...reserves, fee);
+        const actual = getSwapInput(outcome.output, ...reserves, fee);
+        const outcomeForActual = getSwapOutput(actual.input, ...reserves, fee);
         expect(outcome.output).toBe(outcomeForActual.output);
         expect(actual.inputLpFee).toBe(outcomeForActual.inputLpFee);
         expect(actual.nextInputReserve).toBe(outcomeForActual.nextInputReserve);
@@ -293,6 +295,70 @@ describe("getSwapInput", () => {
         expect(actual.priceImpact).toEqual(outcomeForActual.priceImpact);
         expect(actual.priceImpact.eq(impact)).toBe(true);
       }
+    );
+  });
+});
+
+describe("addLiquidity", () => {
+  test.each([
+    {
+      input: 1n,
+      reserves: [1n, 2n],
+      totalLp: getLp(1n, 2n),
+      generatedLp: 1n,
+      nextTotalLp: 2n,
+      requiredB: 2n,
+      shareAfterDeposit: new Fraction(1n, 2n),
+    },
+    {
+      input: 1n,
+      reserves: [1n, 100n],
+      totalLp: getLp(1n, 100n),
+      generatedLp: 10n,
+      nextTotalLp: 20n,
+      requiredB: 100n,
+      shareAfterDeposit: new Fraction(10n, 20n),
+    },
+    {
+      input: 2n,
+      reserves: [1n, 100n],
+      totalLp: getLp(1n, 100n),
+      generatedLp: 20n,
+      nextTotalLp: 30n,
+      requiredB: 200n,
+      shareAfterDeposit: new Fraction(20n, 30n),
+    },
+
+    // Real world examples
+    {
+      input: 1291591603n,
+      reserves: [5753371381n, 672426600000n],
+      totalLp: getLp(5753371381n, 672426600000n),
+      generatedLp: 13963247983n,
+      nextTotalLp: 76162282993n,
+      requiredB: 150955064896n,
+      shareAfterDeposit: new Fraction(13963247983n, 76162282993n),
+    },
+  ] as { input: bigint; reserves: TPair; totalLp: bigint; nextTotalLp: bigint; generatedLp: bigint; requiredB: bigint; shareAfterDeposit: Fraction }[])(
+    "%# input %d; pool %p; fee %d; impact %d",
+    ({ input, reserves, totalLp, ...actualResult }) => {
+      const liquidity = calculateLiquidity(input, ...reserves, totalLp);
+      expect(liquidity.requiredB).toBe(actualResult.requiredB);
+      expect(liquidity.generatedLp).toBe(actualResult.generatedLp);
+      expect(liquidity.nextTotalLp).toBe(actualResult.nextTotalLp);
+      expect(liquidity.shareAfterDeposit).toStrictEqual(
+        actualResult.shareAfterDeposit
+      );
+    }
+  );
+
+  it("should throw an error when the requiredB amount is less than 1", () => {
+    expect(() =>
+      calculateLiquidity(2n, 100n, 1n, getLp(100n, 1n))
+    ).toThrowError(
+      new Error(
+        "The provided a asset is not enough to equal at least 1 of the b asset."
+      )
     );
   });
 });
