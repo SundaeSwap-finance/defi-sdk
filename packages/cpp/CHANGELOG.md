@@ -3,6 +3,67 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.6.0 (2023-05-10)
+
+## 0.5.9 (2023-05-09)
+
+## 0.5.7 (2023-05-09)
+
+### Bug Fixes
+
+- old package references ([cc25bc1](https://github.com/SundaeSwap-finance/defi-sdk/commit/cc25bc1728bfdd64b711e31b7153239d3c8d339f))
+
+## 0.5.6 (2023-05-09)
+
+### Bug Fixes
+
+- lint ([1a56be7](https://github.com/SundaeSwap-finance/defi-sdk/commit/1a56be7d2e541a464dd77512004d120a14b01d4a))
+- test ([217e3d2](https://github.com/SundaeSwap-finance/defi-sdk/commit/217e3d2d419b6be4c0c9e1b55379f445fd66c513))
+
+## 0.5.4 (2023-05-04)
+
+## 0.5.2 (2023-05-04)
+
+# 0.5.0 (2022-08-02)
+
+### Features
+
+- **cpp:** add `addLiquidity` and `getShare` fns ([035c9b6](https://github.com/SundaeSwap-finance/defi-sdk/commit/035c9b6ac791d06fdb965b46b6734e005ed93a8e))
+
+## 0.4.1 (2022-07-10)
+
+### Bug Fixes
+
+- **cpp:** add missing dep: @sundae/bigint-math ([a998c11](https://github.com/SundaeSwap-finance/defi-sdk/commit/a998c114cd4eb8a1833c4e215c8129676a648552))
+
+# 0.4.0 (2022-07-05)
+
+## 0.3.1 (2022-07-05)
+
+### Bug Fixes
+
+- build esm dist correctly ([1fe3975](https://github.com/SundaeSwap-finance/defi-sdk/commit/1fe3975ace34900c846fc820f15766706e34351c))
+
+# 0.3.0 (2022-07-02)
+
+## 0.2.3 (2022-07-02)
+
+## 0.2.2 (2022-07-01)
+
+## 0.2.1 (2022-06-08)
+
+# 0.2.0 (2022-06-07)
+
+### Features
+
+- **cpp:** add lpToken calculations ([9354334](https://github.com/SundaeSwap-finance/defi-sdk/commit/93543340e3fec8924a8b02c8a105f17edf069166))
+
+## 0.1.3 (2022-06-07)
+
+### Features
+
+- **cpp:** init with getSwapInput & getSwapOutput ([a015120](https://github.com/SundaeSwap-finance/defi-sdk/commit/a01512097b3c4b9dcfdd5f7b2b224939480a1c28))
+
 ## [0.5.9](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.7...v0.5.9) (2023-05-09)
 
 **Note:** Version bump only for package @sundaeswap/cpp
