@@ -5266,7 +5266,7 @@ latest-version@^7.0.0:
   dependencies:
     package-json "^8.1.0"
 
-lerna@^5.1.6:
+lerna@^5.6.2:
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-5.6.2.tgz#cdcdfe4e8bf07eccb4ecff1c216def9c67e62af2"
   integrity sha512-Y0yMPslvnBnTZi7Nrs/gDyYZYauNf61xWNCehISHIORxZmmpoluNkcWTfcyb47is5uJQCv5QJX5xKKubbs+a6w==
