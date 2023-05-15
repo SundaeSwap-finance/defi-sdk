@@ -1,5 +1,21 @@
+import { AssetAmount } from "@sundaeswap/asset";
 import { Fraction, TFractionLike } from "@sundaeswap/fraction";
 import { sqrt } from "@sundaeswap/bigint-math";
+
+export type TRatioDirection = "A_PER_B" | "B_PER_A";
+
+export interface IRatioCalculationAsset {
+  assetId: string;
+  quantity: bigint;
+  decimals: number;
+}
+
+export interface IRatioCalculationResult {
+  calculatedAmount: AssetAmount;
+  ratioAsFraction: Fraction;
+  display: string;
+  isDivisible: boolean;
+}
 
 export type TPair = [bigint, bigint];
 
@@ -128,14 +144,13 @@ export const getSwapOutput = (
   if (fee.lt(Fraction.ZERO) || fee.gte(Fraction.ONE))
     throw new Error("fee must be [0,1)");
 
-  const feeDiff = BigInt(fee.denominator - fee.numerator);
-  const output = new Fraction(
-    outputReserve * input * feeDiff,
-    inputReserve * fee.denominator + input * feeDiff
-  );
+  const feeDiff = fee.denominator - fee.numerator;
+  const outputNumerator = outputReserve * input * feeDiff;
+  const outputDenominator = inputReserve * fee.denominator + input * feeDiff;
+  const output = new Fraction(outputNumerator, outputDenominator);
 
   const safeOutput = roundOutputUp
-    ? BigInt(Math.ceil(output.toNumber()))
+    ? (outputNumerator + outputDenominator - 1n) / outputDenominator
     : output.quotient;
 
   const inputLpFee = new Fraction(input * fee.numerator, fee.denominator)
@@ -219,3 +234,88 @@ export const getSwapInput = (
     priceImpact,
   };
 };
+
+/**
+ * Calculates the ratio between two values.
+ *
+ * @function
+ * @param {TFractionLike} firstValue - The first value for the ratio calculation.
+ * @param {TFractionLike} secondValue - The second value for the ratio calculation.
+ * @returns {string|null} The ratio of the first value to the second value, expressed as a string in base 10. If either of the inputs is zero or negative, or if either input is missing, the function returns null.
+ * @throws {Error} Will throw an error if the inputs are not valid for the Fraction class's `asFraction` method.
+ */
+export const getAssetsRatio = (
+  firstValue: TFractionLike,
+  secondValue: TFractionLike
+) => {
+  const first = Fraction.asFraction(firstValue ?? 0);
+  const second = Fraction.asFraction(secondValue ?? 0);
+
+  if (!first.greaterThan(0) || !second.greaterThan(0)) {
+    return null;
+  }
+
+  return first.divide(second).toString(10);
+};
+
+/**
+ * Calculates the swap ratio between two assets and returns an AssetAmount instance representing this ratio.
+ *
+ * The assets are first sorted lexicographically by their assetId to ensure any calculation will match
+ * pool ratios (which are also sorted lexicographically when created). The direction of the swap determines the calculation.
+ * For 'A_PER_B', it calculates how much of the lexicographically first asset (A) is obtained for each unit of the
+ * lexicographically second asset (B). For 'B_PER_A', it calculates how much of the lexicographically second asset (B)
+ * is obtained for each unit of the lexicographically first asset (A).
+ *
+ * The returned AssetAmount is represented in the decimal format of the asset that is being received in the swap operation.
+ * In 'A_PER_B' direction, the lexicographically first asset (A) is received, so the AssetAmount will be in the decimal format
+ * of Asset A. In 'B_PER_A' direction, the lexicographically second asset (B) is received, so the AssetAmount will be in the decimal format of Asset B.
+ *
+ * @function
+ * @param {TRatioDirection} direction - The direction of the swap: 'A_PER_B' means the first asset lexicographically is received and the second is given, 'B_PER_A' means the second asset lexicographically is received and the first is given.
+ * @param {[IRatioCalculationAsset, IRatioCalculationAsset]} assets - An array of two assets involved in the swap. The order of the assets in this array does not matter as they will be sorted lexicographically by their assetId inside the function.
+ *
+ * @returns {TSwapRatio} The calculated swap ratio in different representations.
+ *
+ * @example
+ *
+ * ```ts
+ * const asset1 = { quantity: 100, decimals: 0, assetId: 'B' };
+ * const asset2 = { quantity: 2000000, decimals: 6, assetId: 'A' };
+ * const amount = getSwapRatio('A_PER_B', [asset1, asset2]);
+ * const sameAmount = getSwapRatio('A_PER_B', [asset2, asset1]);
+ * console.log(amount.ratioAsFraction); // Returns a Fraction class of the ratio.
+ * console.log(sameAmount.ratioAsFraction); // Same as above.
+ * ```
+ */
+export function getSwapRatio(
+  direction: TRatioDirection,
+  assets: [IRatioCalculationAsset, IRatioCalculationAsset]
+): IRatioCalculationResult {
+  let calculatedAmount: AssetAmount;
+  let rawRatio: string;
+  const [firstAsset, secondAsset] = assets.sort((a, b) =>
+    a.assetId.localeCompare(b.assetId)
+  );
+
+  if (direction === "A_PER_B") {
+    rawRatio = getAssetsRatio(firstAsset.quantity, secondAsset.quantity);
+    calculatedAmount = AssetAmount.fromValue(
+      Number(rawRatio) * 10 ** (secondAsset.decimals - firstAsset.decimals),
+      firstAsset.decimals
+    );
+  } else {
+    rawRatio = getAssetsRatio(secondAsset.quantity, firstAsset.quantity);
+    calculatedAmount = AssetAmount.fromValue(
+      Number(rawRatio) * 10 ** (firstAsset.decimals - secondAsset.decimals),
+      secondAsset.decimals
+    );
+  }
+
+  return {
+    calculatedAmount: calculatedAmount,
+    display: calculatedAmount.value.toString(),
+    ratioAsFraction: Fraction.asFraction(rawRatio),
+    isDivisible: calculatedAmount.decimals > 0,
+  };
+}

@@ -1,10 +1,19 @@
 import { Fraction, TFractionLike } from "@sundaeswap/fraction";
-import { getSwapOutput, getSwapInput, TPair } from "./ConstantProductPool";
+import {
+  getSwapOutput,
+  getSwapInput,
+  TPair,
+  TRatioDirection,
+  IRatioCalculationAsset,
+  IRatioCalculationResult,
+  getSwapRatio,
+} from "./ConstantProductPool";
 import { getLp } from "./ConstantProductPool";
 import { calculateLiquidity } from "./ConstantProductPool";
+import { AssetAmount } from "@sundaeswap/asset";
 
 describe("getSwapOutput", () => {
-  const threePct = new Fraction(3, 100);
+  const zeroThreePct = new Fraction(3, 1000);
   const onePct = new Fraction(1, 100);
   const zeroPct = Fraction.ZERO;
 
@@ -25,135 +34,151 @@ describe("getSwapOutput", () => {
   });
 
   test("rounds up for non-fractional assets", () => {
-    expect(getSwapOutput(83n, 10000n, 500n, threePct).output).toEqual(3n);
-    expect(getSwapOutput(83n, 10000n, 500n, threePct, true).output).toEqual(4n);
+    expect(getSwapOutput(83n, 10000n, 500n, zeroThreePct).output).toEqual(4n);
+    expect(getSwapOutput(83n, 10000n, 500n, zeroThreePct, true).output).toEqual(
+      5n
+    );
   });
 
   describe("correct output, next state and fee collected", () => {
     test.each([
       // Ideal, 0% pool
       {
+        id: 1,
         input: 1n,
         inReserve: [1n, 1n],
         fee: zeroPct,
         out: 0n,
         outReserve: [2n, 1n],
         lpFee: 0n,
-        impact: 0,
+        impact: new Fraction(0n, 0n),
       },
       {
+        id: 2,
         input: 1n,
         inReserve: [1n, 2n],
         fee: zeroPct,
         out: 1n,
         outReserve: [2n, 1n],
         lpFee: 0n,
-        impact: 0.5,
+        impact: new Fraction(1n, 2n),
       },
       {
+        id: 3,
         input: 100n,
         inReserve: [1n, 2n],
         fee: zeroPct,
         out: 1n,
         outReserve: [101n, 1n],
         lpFee: 0n,
-        impact: 0.995,
+        impact: Fraction.asFraction("0.995"),
       },
       {
+        id: 4,
         input: 100n,
         inReserve: [1n, 100n],
         fee: zeroPct,
         out: 99n,
         outReserve: [101n, 1n],
         lpFee: 0n,
-        impact: 0.9901,
+        impact: Fraction.asFraction("0.9901"),
       },
       {
+        id: 5,
         input: 100n,
         inReserve: [100n, 100n],
         fee: zeroPct,
         out: 50n,
         outReserve: [200n, 50n],
         lpFee: 0n,
-        impact: 0.5,
+        impact: new Fraction(5000n, 10000n),
       },
       {
+        id: 6,
         input: 50n,
         inReserve: [100n, 100n],
         fee: zeroPct,
         out: 33n,
         outReserve: [150n, 67n],
         lpFee: 0n,
-        impact: 0.34,
+        impact: new Fraction(1700n, 5000n),
       },
 
       // Simple boundary cases
       {
+        id: 7,
         input: 1n,
         inReserve: [1n, 1n],
-        fee: threePct,
+        fee: zeroThreePct,
         out: 0n,
         outReserve: [2n, 1n],
         lpFee: 0n,
-        impact: 0,
+        impact: new Fraction(0n, 0n),
       },
       {
+        id: 8,
         input: 1n,
         inReserve: [1n, 2n],
-        fee: threePct,
+        fee: zeroThreePct,
         out: 0n,
         outReserve: [2n, 2n],
         lpFee: 0n,
-        impact: 0.5,
+        impact: Fraction.asFraction("0.5"),
       },
       {
+        id: 9,
         input: 1n,
         inReserve: [1n, 3n],
-        fee: threePct,
+        fee: zeroThreePct,
         out: 1n,
         outReserve: [2n, 2n],
         lpFee: 0n,
         impact: new Fraction(2, 3),
       },
       {
+        id: 10,
         input: 100n,
         inReserve: [1n, 2n],
-        fee: threePct,
+        fee: zeroThreePct,
         out: 1n,
         outReserve: [101n, 1n],
-        lpFee: 3n,
-        impact: new Fraction(193, 194),
+        lpFee: 0n,
+        impact: Fraction.asFraction("0.995"),
       },
       {
+        id: 11,
         input: 100n,
         inReserve: [1n, 100n],
-        fee: threePct,
-        out: 98n,
-        outReserve: [101n, 2n],
-        lpFee: 3n,
-        impact: new Fraction(9602, 9700),
+        fee: zeroThreePct,
+        out: 99n,
+        outReserve: [101n, 1n],
+        lpFee: 0n,
+        impact: Fraction.asFraction("0.9901"),
       },
       {
+        id: 12,
         input: 100n,
         inReserve: [100n, 100n],
-        fee: threePct,
+        fee: zeroThreePct,
         out: 49n,
         outReserve: [200n, 51n],
-        lpFee: 3n,
-        impact: new Fraction(4800, 9700),
+        lpFee: 0n,
+        impact: new Fraction(5100n, 10000n),
       },
       {
+        id: 13,
         input: 50n,
         inReserve: [100n, 100n],
-        fee: threePct,
-        out: 32n,
-        outReserve: [150n, 68n],
-        lpFee: 1n,
-        impact: new Fraction(1700, 4900),
+        fee: zeroThreePct,
+        out: 33n,
+        outReserve: [150n, 67n],
+        lpFee: 0n,
+        impact: new Fraction(1700n, 5000n),
       },
 
       // Real world examples
       {
+        id: 14,
         input: 1291591603n,
         inReserve: [5753371381n, 672426600000n],
         fee: onePct,
@@ -162,8 +187,18 @@ describe("getSwapOutput", () => {
         lpFee: 12915916n,
         impact: new Fraction(156344976337673367251n, 859815544712074200000n),
       },
-    ] as { input: bigint; inReserve: TPair; fee: TFractionLike; out: bigint; outReserve: TPair; lpFee: bigint; impact: TFractionLike }[])(
-      "%# input %d; pool %p; fee %d => output %o; nextPool %p; fee: %d; impact %d",
+      {
+        id: 15,
+        input: 1000000n,
+        inReserve: [3696260028076n, 77871393827281n],
+        fee: zeroThreePct,
+        out: 21004409n,
+        outReserve: [3696261028076n, 77871372822872n],
+        lpFee: 3000n,
+        impact: new Fraction(22245739369916n, 77637779645799157000n),
+      },
+    ] as { input: bigint; inReserve: TPair; fee: TFractionLike; out: bigint; outReserve: TPair; lpFee: bigint; impact: TFractionLike; id: number }[])(
+      "id %#; %# input %d; pool %p; fee %d => output %o; nextPool %p; fee: %d; impact %d",
       ({ input, inReserve, fee, out, outReserve, lpFee, impact }) => {
         const actual = getSwapOutput(input, ...inReserve, fee);
         expect(actual.output).toBe(out);
@@ -172,13 +207,14 @@ describe("getSwapOutput", () => {
         expect(actual.nextInputReserve).toBe(input + inReserve[0]);
         expect(actual.nextOutputReserve).toBe(outReserve[1]);
         expect(actual.nextOutputReserve + actual.output).toBe(inReserve[1]);
-        expect(actual.priceImpact.eq(impact)).toBe(true);
+        expect(actual.priceImpact).toStrictEqual(impact);
       }
     );
   });
 });
 
 describe("getSwapInput", () => {
+  const fivePct = new Fraction(5, 100);
   const threePct = new Fraction(3, 100);
   const onePct = new Fraction(1, 100);
   const zeroPct = Fraction.ZERO;
@@ -275,6 +311,18 @@ describe("getSwapInput", () => {
 
       // Real world examples
       {
+        input: 5n,
+        reserves: [84159832107n, 123172010729n],
+        fee: fivePct,
+        impact: new Fraction(110901061003n, 615860053645n),
+      },
+      {
+        input: 100n,
+        reserves: [84159832107n, 123172010729n],
+        fee: fivePct,
+        impact: new Fraction(3124356382n, 11701341019255n),
+      },
+      {
         input: 1291591603n,
         reserves: [5753371381n, 672426600000n],
         fee: onePct,
@@ -293,7 +341,7 @@ describe("getSwapInput", () => {
           outcomeForActual.nextOutputReserve
         );
         expect(actual.priceImpact).toEqual(outcomeForActual.priceImpact);
-        expect(actual.priceImpact.eq(impact)).toBe(true);
+        expect(actual.priceImpact).toStrictEqual(impact);
       }
     );
   });
@@ -361,4 +409,121 @@ describe("addLiquidity", () => {
       )
     );
   });
+});
+
+describe("getSwapRatio", () => {
+  const testCases: {
+    direction: TRatioDirection;
+    assets: [IRatioCalculationAsset, IRatioCalculationAsset];
+    expectedOutput: IRatioCalculationResult;
+  }[] = [
+    {
+      direction: "A_PER_B",
+      assets: [
+        { quantity: 100n, decimals: 0, assetId: "A" },
+        { quantity: 200n, decimals: 0, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(0n),
+        ratioAsFraction: new Fraction(1n, 2n),
+        display: "0",
+        isDivisible: false,
+      },
+    },
+    {
+      direction: "A_PER_B",
+      assets: [
+        { quantity: 200n, decimals: 0, assetId: "B" },
+        { quantity: 100n, decimals: 0, assetId: "A" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(0n),
+        ratioAsFraction: new Fraction(1n, 2n),
+        display: "0",
+        isDivisible: false,
+      },
+    },
+    {
+      direction: "B_PER_A",
+      assets: [
+        { quantity: 200n, decimals: 0, assetId: "B" },
+        { quantity: 100n, decimals: 0, assetId: "A" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(2n),
+        ratioAsFraction: new Fraction(2n, 1n),
+        display: "2",
+        isDivisible: false,
+      },
+    },
+    {
+      direction: "A_PER_B",
+      assets: [
+        { quantity: 100n, decimals: 0, assetId: "A" },
+        { quantity: 2000000n, decimals: 6, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(50n),
+        ratioAsFraction: new Fraction(1n, 20000n),
+        display: "50",
+        isDivisible: false,
+      },
+    },
+    {
+      direction: "B_PER_A",
+      assets: [
+        { quantity: 100n, decimals: 0, assetId: "A" },
+        { quantity: 2000000n, decimals: 6, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(20000n, 6),
+        ratioAsFraction: new Fraction(20000n, 1n),
+        display: "0.02",
+        isDivisible: true,
+      },
+    },
+    {
+      direction: "A_PER_B",
+      assets: [
+        { quantity: 1000000n, decimals: 6, assetId: "A" },
+        { quantity: 200n, decimals: 0, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(5000n, 6),
+        ratioAsFraction: new Fraction(5000n, 1n),
+        display: "0.005",
+        isDivisible: true,
+      },
+    },
+    {
+      direction: "B_PER_A",
+      assets: [
+        { quantity: 1000000n, decimals: 6, assetId: "A" },
+        { quantity: 200n, decimals: 0, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(200n),
+        ratioAsFraction: new Fraction(1n, 5000n),
+        display: "200",
+        isDivisible: false,
+      },
+    },
+  ];
+
+  test.each(testCases)(
+    "given direction %p and assets %p, returns %p",
+    (testCase) => {
+      const { calculatedAmount, ratioAsFraction, display, isDivisible } =
+        getSwapRatio(testCase.direction, testCase.assets);
+      expect(calculatedAmount.amount).toEqual(
+        testCase.expectedOutput.calculatedAmount.amount
+      );
+      expect(calculatedAmount.value.toString()).toEqual(
+        testCase.expectedOutput.calculatedAmount.value.toString()
+      );
+      expect(ratioAsFraction).toEqual(testCase.expectedOutput.ratioAsFraction);
+      expect(display).toEqual(testCase.expectedOutput.display);
+      expect(isDivisible).toEqual(testCase.expectedOutput.isDivisible);
+    }
+  );
 });
