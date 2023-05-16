@@ -25,7 +25,6 @@
     "prepare": "husky install",
     "version:ci": "lerna version -y --ignore-scripts",
     "publish:ci": "lerna publish from-package -y",
-    "release": "yarn build && lerna publish from-package -y",
     "canary": "lerna publish from-package -y --canary",
     "typecheck": "tsc --noEmit"
   },
