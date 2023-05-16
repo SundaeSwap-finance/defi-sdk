@@ -1846,6 +1846,18 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@sundaeswap/asset@^0.5.9":
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/asset/-/asset-0.5.9.tgz#7fa80ded83cdbbf4505380c38bffc7845145f67c"
+  integrity sha512-Mpq8pOxCCKCrx2tp0zce2aqqxw8GXGOAU834SD2ovHORIojRKrswZKgLgji1jQMujfB9F9xQlY7MKFvtFdD97Q==
+  dependencies:
+    "@sundaeswap/fraction" "^0.5.9"
+
+"@sundaeswap/fraction@^0.5.9":
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/fraction/-/fraction-0.5.9.tgz#cd97f453bee9b9933ec98d1287fdeca28ea6cdb8"
+  integrity sha512-3KamPkKlXj6oLY1NNb4QjwKc0p+2MUthEGbFl4S9hf7qdxH5HWE4itcbsMpLOmEHWWy1N3fzUffuVkPWsyddZg==
+
 "@szmarczak/http-timer@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-5.0.1.tgz#c7c1bf1141cdd4751b0399c8fc7b8b664cd5be3a"
