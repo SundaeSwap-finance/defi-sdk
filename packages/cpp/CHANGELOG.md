@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/cpp@0.6.0...@sundaeswap/cpp@0.6.1) (2023-05-16)
+
+**Note:** Version bump only for package @sundaeswap/cpp
+
 # 0.6.0 (2023-05-10)
 
 ## 0.5.9 (2023-05-09)
