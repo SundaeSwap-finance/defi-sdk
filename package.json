@@ -23,7 +23,7 @@
     "postinstall": "yarn bootstrap",
     "preinstall": "node tools/preinstall.ts",
     "prepare": "husky install",
-    "version:ci": "lerna version -y --ignore-scripts --frozen-lockfile",
+    "version:ci": "lerna version -y --ignore-scripts",
     "publish:ci": "lerna publish from-package -y",
     "canary": "lerna publish from-package -y --canary",
     "typecheck": "tsc --noEmit"
