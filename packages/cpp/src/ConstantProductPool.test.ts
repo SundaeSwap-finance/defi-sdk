@@ -347,7 +347,7 @@ describe("getSwapInput", () => {
   });
 });
 
-describe("addLiquidity", () => {
+describe("calculateLiquidity", () => {
   test.each([
     {
       a: 1n,
