@@ -8,7 +8,7 @@ import {
   IRatioCalculationResult,
   getSwapRatio,
 } from "./ConstantProductPool";
-import { getLp } from "./ConstantProductPool";
+import { getFirstLp } from "./ConstantProductPool";
 import { calculateLiquidity } from "./ConstantProductPool";
 import { AssetAmount } from "@sundaeswap/asset";
 
@@ -353,7 +353,7 @@ describe("calculateLiquidity", () => {
       a: 1n,
       b: 2n,
       reserves: [1n, 2n],
-      totalLp: getLp(1n, 2n),
+      totalLp: getFirstLp(1n, 2n),
       generatedLp: 1n,
       nextTotalLp: 2n,
       shareAfterDeposit: new Fraction(1n, 2n),
@@ -364,7 +364,7 @@ describe("calculateLiquidity", () => {
       a: 1n,
       b: 100n,
       reserves: [1n, 100n],
-      totalLp: getLp(1n, 100n),
+      totalLp: getFirstLp(1n, 100n),
       generatedLp: 10n,
       nextTotalLp: 20n,
       shareAfterDeposit: new Fraction(10n, 20n),
@@ -375,7 +375,7 @@ describe("calculateLiquidity", () => {
       a: 2n,
       b: 200n,
       reserves: [1n, 100n],
-      totalLp: getLp(1n, 100n),
+      totalLp: getFirstLp(1n, 100n),
       generatedLp: 20n,
       nextTotalLp: 30n,
       shareAfterDeposit: new Fraction(20n, 30n),
@@ -387,7 +387,7 @@ describe("calculateLiquidity", () => {
       a: 5n,
       b: 250n,
       reserves: [1n, 100n],
-      totalLp: getLp(1n, 100n),
+      totalLp: getFirstLp(1n, 100n),
       generatedLp: 20n,
       nextTotalLp: 30n,
       shareAfterDeposit: new Fraction(20n, 30n),
@@ -400,7 +400,7 @@ describe("calculateLiquidity", () => {
       a: 3n,
       b: 200n,
       reserves: [1n, 100n],
-      totalLp: getLp(1n, 100n),
+      totalLp: getFirstLp(1n, 100n),
       generatedLp: 20n,
       nextTotalLp: 30n,
       shareAfterDeposit: new Fraction(20n, 30n),
@@ -424,7 +424,7 @@ describe("calculateLiquidity", () => {
       a: 1291591603n,
       b: 150955064896n,
       reserves: [5753371381n, 672426600000n],
-      totalLp: getLp(5753371381n, 672426600000n),
+      totalLp: getFirstLp(5753371381n, 672426600000n),
       generatedLp: 13963247972n,
       nextTotalLp: 76162282982n,
       shareAfterDeposit: new Fraction(13963247972n, 76162282982n),
@@ -435,7 +435,7 @@ describe("calculateLiquidity", () => {
       a: 5000000n,
       b: 1869359n,
       reserves: [684236468144n, 256584648756n],
-      totalLp: getLp(684236468144n, 256584648756n),
+      totalLp: getFirstLp(684236468144n, 256584648756n),
       generatedLp: 3052674n,
       nextTotalLp: 419007317383n,
       shareAfterDeposit: new Fraction(3052674n, 419007317383n),
@@ -459,10 +459,10 @@ describe("calculateLiquidity", () => {
   it("should throw an error when the requiredB amount is less than 1", () => {
     const zeroError = new Error("Cannot use a deposit asset amount of 0");
     expect(() =>
-      calculateLiquidity(2n, 0n, 100n, 1n, getLp(100n, 1n))
+      calculateLiquidity(2n, 0n, 100n, 1n, getFirstLp(100n, 1n))
     ).toThrowError(zeroError);
     expect(() =>
-      calculateLiquidity(0n, 2n, 100n, 1n, getLp(100n, 1n))
+      calculateLiquidity(0n, 2n, 100n, 1n, getFirstLp(100n, 1n))
     ).toThrowError(zeroError);
   });
 });

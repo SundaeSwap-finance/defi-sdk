@@ -25,7 +25,12 @@ export type TPair = [bigint, bigint];
  * @param b tokenB amount
  * @returns the minted lp token amount
  */
-export const getLp = (a: bigint, b: bigint) => sqrt(a * b);
+export const getFirstLp = (a: bigint, b: bigint) => sqrt(a * b);
+
+/**
+ * @deprecated
+ */
+export const getLp = getFirstLp;
 
 /**
  * Get the share ratio as Fraction
