@@ -66,22 +66,35 @@ export const calculateLiquidity = (
     throw new Error("Cannot use a deposit asset amount of 0");
   }
 
-  let bInUnitsOfA = (bReserve * a) / aReserve;
-  let aChange = 0n;
+  const bInUnitsOfA = (b * aReserve) / bReserve;
 
-  if (bInUnitsOfA < b) {
-    aChange = b - bInUnitsOfA;
+  let aChange: bigint;
+  let bChange: bigint;
+
+  if (bInUnitsOfA > a) {
+    bChange = (bReserve * (bInUnitsOfA - a)) / aReserve;
+    aChange = 0n;
+  } else {
+    aChange = a - bInUnitsOfA;
+    bChange = 0n;
   }
 
-  const actualDepA = a - aChange;
+  // Subtract off the surplus as returned to the user
+  const actualDepositedA = a - aChange;
+  const actualDepositedB = b - bChange;
 
-  const newLpTokens = (actualDepA * totalLp) / aReserve;
+  // Calculate LP Tokens
+  const newLpTokens = (actualDepositedA * totalLp) / aReserve;
   const newTotalLpTokens = totalLp + newLpTokens;
 
   return {
     nextTotalLp: newTotalLpTokens,
     generatedLp: newLpTokens,
     shareAfterDeposit: getShare(newLpTokens, newTotalLpTokens),
+    bChange,
+    aChange,
+    actualDepositedA,
+    actualDepositedB,
   };
 };
 

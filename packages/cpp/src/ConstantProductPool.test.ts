@@ -357,6 +357,8 @@ describe("calculateLiquidity", () => {
       generatedLp: 1n,
       nextTotalLp: 2n,
       shareAfterDeposit: new Fraction(1n, 2n),
+      aChange: 0n,
+      bChange: 0n,
     },
     {
       a: 1n,
@@ -366,6 +368,8 @@ describe("calculateLiquidity", () => {
       generatedLp: 10n,
       nextTotalLp: 20n,
       shareAfterDeposit: new Fraction(10n, 20n),
+      aChange: 0n,
+      bChange: 0n,
     },
     {
       a: 2n,
@@ -375,6 +379,33 @@ describe("calculateLiquidity", () => {
       generatedLp: 20n,
       nextTotalLp: 30n,
       shareAfterDeposit: new Fraction(20n, 30n),
+      aChange: 0n,
+      bChange: 0n,
+    },
+    // Too much of token a
+    {
+      a: 5n,
+      b: 250n,
+      reserves: [1n, 100n],
+      totalLp: getLp(1n, 100n),
+      generatedLp: 20n,
+      nextTotalLp: 30n,
+      shareAfterDeposit: new Fraction(20n, 30n),
+      aChange: 3n,
+      bChange: 0n,
+    },
+
+    // Too much of token b
+    {
+      a: 3n,
+      b: 200n,
+      reserves: [1n, 100n],
+      totalLp: getLp(1n, 100n),
+      generatedLp: 20n,
+      nextTotalLp: 30n,
+      shareAfterDeposit: new Fraction(20n, 30n),
+      aChange: 1n,
+      bChange: 0n,
     },
 
     // Real world examples
@@ -383,25 +414,42 @@ describe("calculateLiquidity", () => {
       b: 151611403n,
       reserves: [9993743829n, 15009515148n],
       totalLp: 12247448713n,
-      generatedLp: 123711716n,
-      nextTotalLp: 12371160429n,
-      shareAfterDeposit: new Fraction(123711716n, 12371160429n),
+      generatedLp: 123711715n,
+      nextTotalLp: 12371160428n,
+      shareAfterDeposit: new Fraction(123711715n, 12371160428n),
+      aChange: 1n,
+      bChange: 0n,
     },
     {
       a: 1291591603n,
       b: 150955064896n,
       reserves: [5753371381n, 672426600000n],
       totalLp: getLp(5753371381n, 672426600000n),
-      generatedLp: 13963247983n,
-      nextTotalLp: 76162282993n,
-      shareAfterDeposit: new Fraction(13963247983n, 76162282993n),
+      generatedLp: 13963247972n,
+      nextTotalLp: 76162282982n,
+      shareAfterDeposit: new Fraction(13963247972n, 76162282982n),
+      aChange: 1n,
+      bChange: 0n,
     },
-  ] as { a: bigint; b: bigint; reserves: TPair; totalLp: bigint; nextTotalLp: bigint; generatedLp: bigint; requiredB: bigint; shareAfterDeposit: Fraction }[])(
+    {
+      a: 5000000n,
+      b: 1869359n,
+      reserves: [684236468144n, 256584648756n],
+      totalLp: getLp(684236468144n, 256584648756n),
+      generatedLp: 3052674n,
+      nextTotalLp: 419007317383n,
+      shareAfterDeposit: new Fraction(3052674n, 419007317383n),
+      aChange: 14965n,
+      bChange: 0n,
+    },
+  ] as { a: bigint; b: bigint; reserves: TPair; totalLp: bigint; nextTotalLp: bigint; generatedLp: bigint; requiredB: bigint; shareAfterDeposit: Fraction; aChange: bigint; bChange: bigint }[])(
     "$# calculateLiquidity($a, $b, $reserves[0], $reserves[1], $totalLp)",
     ({ a, b, reserves, totalLp, ...expectedResult }) => {
       const actualResult = calculateLiquidity(a, b, ...reserves, totalLp);
       expect(actualResult.generatedLp).toBe(expectedResult.generatedLp);
       expect(actualResult.nextTotalLp).toBe(expectedResult.nextTotalLp);
+      expect(actualResult.aChange).toBe(expectedResult.aChange);
+      expect(actualResult.bChange).toBe(expectedResult.bChange);
       expect(actualResult.shareAfterDeposit).toStrictEqual(
         expectedResult.shareAfterDeposit
       );
