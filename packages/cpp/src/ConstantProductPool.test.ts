@@ -377,7 +377,7 @@ describe("calculateLiquidity", () => {
       shareAfterDeposit: new Fraction(20n, 30n),
     },
 
-    // // Real world examples
+    // Real world examples
     {
       a: 100947000n,
       b: 151611403n,

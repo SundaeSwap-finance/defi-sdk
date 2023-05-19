@@ -68,7 +68,6 @@ export const calculateLiquidity = (
 
   let bInUnitsOfA = (bReserve * a) / aReserve;
   let aChange = 0n;
-  // let bChange = 0n;
 
   if (bInUnitsOfA < b) {
     aChange = b - bInUnitsOfA;
