@@ -350,64 +350,72 @@ describe("getSwapInput", () => {
 describe("addLiquidity", () => {
   test.each([
     {
-      input: 1n,
+      a: 1n,
+      b: 2n,
       reserves: [1n, 2n],
       totalLp: getLp(1n, 2n),
       generatedLp: 1n,
       nextTotalLp: 2n,
-      requiredB: 2n,
       shareAfterDeposit: new Fraction(1n, 2n),
     },
     {
-      input: 1n,
+      a: 1n,
+      b: 100n,
       reserves: [1n, 100n],
       totalLp: getLp(1n, 100n),
       generatedLp: 10n,
       nextTotalLp: 20n,
-      requiredB: 100n,
       shareAfterDeposit: new Fraction(10n, 20n),
     },
     {
-      input: 2n,
+      a: 2n,
+      b: 200n,
       reserves: [1n, 100n],
       totalLp: getLp(1n, 100n),
       generatedLp: 20n,
       nextTotalLp: 30n,
-      requiredB: 200n,
       shareAfterDeposit: new Fraction(20n, 30n),
     },
 
-    // Real world examples
+    // // Real world examples
     {
-      input: 1291591603n,
+      a: 100947000n,
+      b: 151611403n,
+      reserves: [9993743829n, 15009515148n],
+      totalLp: 12247448713n,
+      generatedLp: 123711716n,
+      nextTotalLp: 12371160429n,
+      shareAfterDeposit: new Fraction(123711716n, 12371160429n),
+    },
+    {
+      a: 1291591603n,
+      b: 150955064896n,
       reserves: [5753371381n, 672426600000n],
       totalLp: getLp(5753371381n, 672426600000n),
       generatedLp: 13963247983n,
       nextTotalLp: 76162282993n,
-      requiredB: 150955064896n,
       shareAfterDeposit: new Fraction(13963247983n, 76162282993n),
     },
-  ] as { input: bigint; reserves: TPair; totalLp: bigint; nextTotalLp: bigint; generatedLp: bigint; requiredB: bigint; shareAfterDeposit: Fraction }[])(
-    "%# input %d; pool %p; fee %d; impact %d",
-    ({ input, reserves, totalLp, ...actualResult }) => {
-      const liquidity = calculateLiquidity(input, ...reserves, totalLp);
-      expect(liquidity.requiredB).toBe(actualResult.requiredB);
-      expect(liquidity.generatedLp).toBe(actualResult.generatedLp);
-      expect(liquidity.nextTotalLp).toBe(actualResult.nextTotalLp);
-      expect(liquidity.shareAfterDeposit).toStrictEqual(
-        actualResult.shareAfterDeposit
+  ] as { a: bigint; b: bigint; reserves: TPair; totalLp: bigint; nextTotalLp: bigint; generatedLp: bigint; requiredB: bigint; shareAfterDeposit: Fraction }[])(
+    "$# calculateLiquidity($a, $b, $reserves[0], $reserves[1], $totalLp)",
+    ({ a, b, reserves, totalLp, ...expectedResult }) => {
+      const actualResult = calculateLiquidity(a, b, ...reserves, totalLp);
+      expect(actualResult.generatedLp).toBe(expectedResult.generatedLp);
+      expect(actualResult.nextTotalLp).toBe(expectedResult.nextTotalLp);
+      expect(actualResult.shareAfterDeposit).toStrictEqual(
+        expectedResult.shareAfterDeposit
       );
     }
   );
 
   it("should throw an error when the requiredB amount is less than 1", () => {
+    const zeroError = new Error("Cannot use a deposit asset amount of 0");
     expect(() =>
-      calculateLiquidity(2n, 100n, 1n, getLp(100n, 1n))
-    ).toThrowError(
-      new Error(
-        "The provided a asset is not enough to equal at least 1 of the b asset."
-      )
-    );
+      calculateLiquidity(2n, 0n, 100n, 1n, getLp(100n, 1n))
+    ).toThrowError(zeroError);
+    expect(() =>
+      calculateLiquidity(0n, 2n, 100n, 1n, getLp(100n, 1n))
+    ).toThrowError(zeroError);
   });
 });
 
