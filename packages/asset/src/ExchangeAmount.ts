@@ -6,7 +6,7 @@ export interface IExchangeAmountAsset {
 }
 
 export class ExchangeAssetRatio {
-  // es-lint-disable-next-line no-useless-constructor
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     public numerator: ExchangeAmount,
     public denominator: ExchangeAmount
