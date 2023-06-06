@@ -9,7 +9,8 @@ export interface IAssetAmountMetadata {
   [key: string]: any;
 }
 
-export class AssetRatio<T extends IAssetAmountMetadata> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class AssetRatio<T extends IAssetAmountMetadata = any> {
   // eslint-disable-next-line no-useless-constructor
   constructor(
     public numerator: AssetAmount<T>,
