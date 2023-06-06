@@ -5,6 +5,7 @@ export interface IAssetAmountMetadata {
   id?: string;
   assetId: string;
   decimals: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -22,6 +23,7 @@ export class AssetRatio<T extends IAssetAmountMetadata> {
  * @extends {IAssetAmountMetadata}
  * @implements {TFungibleToken}
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class AssetAmount<T extends IAssetAmountMetadata = any>
   implements TFungibleToken
 {
@@ -54,6 +56,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
    * @param {number | T} metadata - The metadata associated with the asset amount.
    * @returns {AssetAmount} - A new AssetAmount instance.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromValue<T extends IAssetAmountMetadata = any>(
     value: TFractionLike,
     metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
@@ -81,6 +84,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withAmount = <T extends IAssetAmountMetadata = any>(
     amount: TIntegerLike,
     metadata?: T
@@ -88,6 +92,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     return new AssetAmount<T>(amount, metadata);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withValue = <T extends IAssetAmountMetadata = any>(
     value: TFractionLike,
     metadata?: T
