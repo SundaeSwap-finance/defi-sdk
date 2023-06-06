@@ -1,14 +1,30 @@
 import { Fraction, TFractionLike, TIntegerLike } from "@sundaeswap/fraction";
 import { IHasStringId, stringIdEquals, TFungibleToken } from "./Asset";
 
+export interface IAssetAmountMetadata {
+  id?: string;
+  assetId: string;
+  decimals: number;
+}
+
+export class AssetRatio<T extends IAssetAmountMetadata = IAssetAmountMetadata> {
+  // eslint-disable-next-line no-useless-constructor
+  constructor(
+    public numerator: AssetAmount<T>,
+    public denominator: AssetAmount<T>
+  ) {}
+}
+
 /**
  * Represent a Fungible token with BigInt amount, decimals and id.
  * Immutable
  */
-export class AssetAmount implements TFungibleToken {
-  static readonly DEFAULT_FUNGIBLE_TOKEN_ID = "";
+export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
+  implements TFungibleToken
+{
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
 
+  readonly metadata: T;
   readonly id: string;
   readonly decimals: number;
   readonly amount: bigint;
@@ -28,44 +44,48 @@ export class AssetAmount implements TFungibleToken {
    * Create a new `AssetAmount` with fraction like `value`, `decimals` and `id`
    * @param value
    * @param decimals
-   * @param id
    * @returns
    */
-  static fromValue(
+  static fromValue<T extends IAssetAmountMetadata = IAssetAmountMetadata>(
     value: TFractionLike,
-    decimals: number = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
-    id?: string
+    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
   ): AssetAmount {
-    return new AssetAmount(
+    let decimals = typeof metadata === "number" ? metadata : metadata.decimals;
+    return new AssetAmount<T>(
       Fraction.asFraction(value).multiply(10 ** decimals).quotient,
-      decimals,
-      id
+      metadata
     );
   }
 
   /**
-   * Create new `AssetAmount` with `amount`, `decimals` and `id`
+   * Create new `AssetAmount` with `amount`, `decimals` and `metadata`
    * @param amount the token amount, bigint represented as string, number or bigint. Default: 0n
    * @param decimals the token decimals, default is 0
-   * @param id the token id, default is empty string
+   * @param metadata the metadata associated with the asset amount.
    */
   constructor(
     amount: TIntegerLike = 0n,
-    decimals = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
-    id = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_ID
+    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
   ) {
-    this.id = id;
-    this.decimals = decimals;
     this.amount = BigInt(amount);
+    this.decimals = typeof metadata === "number" ? metadata : metadata.decimals;
+    this.metadata = typeof metadata === "number" ? undefined : metadata;
+    this.id = typeof metadata === "number" ? undefined : metadata.id;
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
-  withAmount = (amount: TIntegerLike): AssetAmount => {
-    return new AssetAmount(amount, this.decimals, this.id);
+  withAmount = <T extends IAssetAmountMetadata = IAssetAmountMetadata>(
+    amount: TIntegerLike,
+    metadata?: T
+  ): AssetAmount => {
+    return new AssetAmount<T>(amount, metadata);
   };
 
-  withValue = (value: TFractionLike): AssetAmount => {
-    return AssetAmount.fromValue(value, this.decimals, this.id);
+  withValue = <T extends IAssetAmountMetadata = IAssetAmountMetadata>(
+    value: TFractionLike,
+    metadata?: T
+  ): AssetAmount => {
+    return AssetAmount.fromValue<T>(value, metadata);
   };
 
   add = (rhs: AssetAmount): AssetAmount => {
