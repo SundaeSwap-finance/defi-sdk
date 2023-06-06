@@ -16,13 +16,19 @@ export class AssetRatio<T extends IAssetAmountMetadata = IAssetAmountMetadata> {
 }
 
 /**
- * Represent a Fungible token with BigInt amount, decimals and id.
- * Immutable
+ * Class representing a fungible token with BigInt amount, decimals and id.
+ * @template T
+ * @extends {IAssetAmountMetadata}
+ * @implements {TFungibleToken}
  */
 export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   implements TFungibleToken
 {
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
+  static INVALID_METADATA =
+    "Cannot perform exchange calculation on an AssetAmount with no metadata.";
+  static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
+  static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
 
   readonly metadata: T;
   readonly id: string;
@@ -32,19 +38,20 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
 
   /**
    * Represent a token amount and decimals as `Fraction` (`value`)
-   * @param amount
-   * @param decimals
-   * @returns
+   * @param {bigint} amount - The amount of token.
+   * @param {number} decimals - The decimal places of the token amount.
+   * @returns {Fraction} - The token amount represented as a fraction.
    */
   static toValue(amount: bigint, decimals = 0): Fraction {
     return new Fraction(amount, 10n ** BigInt(decimals));
   }
 
   /**
-   * Create a new `AssetAmount` with fraction like `value`, `decimals` and `id`
-   * @param value
-   * @param decimals
-   * @returns
+   * Creates a new `AssetAmount` instance with fraction like `value`, `decimals` and `id`
+   * @template T
+   * @param {TFractionLike} value - The token amount represented as a fraction.
+   * @param {number | T} metadata - The metadata associated with the asset amount.
+   * @returns {AssetAmount} - A new AssetAmount instance.
    */
   static fromValue<T extends IAssetAmountMetadata = IAssetAmountMetadata>(
     value: TFractionLike,
@@ -58,10 +65,9 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   }
 
   /**
-   * Create new `AssetAmount` with `amount`, `decimals` and `metadata`
-   * @param amount the token amount, bigint represented as string, number or bigint. Default: 0n
-   * @param decimals the token decimals, default is 0
-   * @param metadata the metadata associated with the asset amount.
+   * Creates a new `AssetAmount` instance with `amount`, `decimals` and `metadata`
+   * @param {TIntegerLike} amount - The token amount, bigint represented as string, number or bigint. Default: 0n.
+   * @param {number | T} metadata - The metadata associated with the asset amount.
    */
   constructor(
     amount: TIntegerLike = 0n,
@@ -115,11 +121,12 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   };
   isSameAsset = this.equalsAssetId;
 
-  static INVALID_METADATA =
-    "Cannot perform exchange calculation on an AssetAmount with no metadata.";
-  static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
-  static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
-
+  /**
+   * Multiplies the asset amount with an asset ratio and returns a new AssetAmount.
+   * @param {AssetRatio<T>} ar - The asset ratio to multiply with.
+   * @throws {Error} - Throws an error if the metadata is invalid or if the metadata does not match with the denominator's metadata.
+   * @returns {AssetAmount} - A new AssetAmount representing the multiplication result.
+   */
   exchangeMultiply(ar: AssetRatio<T>): AssetAmount {
     if (!this.metadata || !ar.denominator.metadata || !ar.numerator.metadata) {
       throw new Error(AssetAmount.INVALID_METADATA);
@@ -135,6 +142,12 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     );
   }
 
+  /**
+   * Divides the asset amount by an asset ratio and returns a new AssetAmount.
+   * @param {AssetRatio<T>} ar - The asset ratio to divide by.
+   * @throws {Error} - Throws an error if the metadata is invalid or if the metadata does not match with the numerator's metadata.
+   * @returns {AssetAmount} - A new AssetAmount representing the division result.
+   */
   exchangeDivide(ar: AssetRatio<T>): AssetAmount {
     if (!this.metadata || !ar.denominator.metadata || !ar.numerator.metadata) {
       throw new Error(AssetAmount.INVALID_METADATA);
@@ -150,6 +163,11 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     );
   }
 
+  /**
+   * Performs multiplication or division on the asset amount using an asset ratio, depending on the metadata.
+   * @param {AssetRatio<T>} ar - The asset ratio for the operation.
+   * @returns {AssetAmount} - A new AssetAmount representing the result of the operation.
+   */
   exchangeAt(ar: AssetRatio<T>): AssetAmount {
     if (this.metadata === ar.denominator.metadata) {
       return this.exchangeMultiply(ar);
