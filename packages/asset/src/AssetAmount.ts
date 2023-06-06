@@ -114,4 +114,47 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     return stringIdEquals(this, rhs);
   };
   isSameAsset = this.equalsAssetId;
+
+  static INVALID_METADATA =
+    "Cannot perform exchange calculation on an AssetAmount with no metadata.";
+  static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
+  static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
+
+  exchangeMultiply(ar: AssetRatio<T>): AssetAmount {
+    if (!this.metadata || !ar.denominator.metadata || !ar.numerator.metadata) {
+      throw new Error(AssetAmount.INVALID_METADATA);
+    }
+
+    if (this.metadata !== ar.denominator.metadata) {
+      throw new Error(AssetAmount.INVALID_MULTIPLICATION_ERROR);
+    }
+
+    return new AssetAmount<T>(
+      (this.amount * ar.numerator.amount) / ar.denominator.amount,
+      ar.numerator.metadata
+    );
+  }
+
+  exchangeDivide(ar: AssetRatio<T>): AssetAmount {
+    if (!this.metadata || !ar.denominator.metadata || !ar.numerator.metadata) {
+      throw new Error(AssetAmount.INVALID_METADATA);
+    }
+
+    if (this.metadata !== ar.numerator.metadata) {
+      throw new Error(AssetAmount.INVALID_DIVISION_ERROR);
+    }
+
+    return new AssetAmount<T>(
+      (this.amount * ar.denominator.amount) / ar.numerator.amount,
+      ar.denominator.metadata
+    );
+  }
+
+  exchangeAt(ar: AssetRatio<T>): AssetAmount {
+    if (this.metadata === ar.denominator.metadata) {
+      return this.exchangeMultiply(ar);
+    } else {
+      return this.exchangeDivide(ar);
+    }
+  }
 }
