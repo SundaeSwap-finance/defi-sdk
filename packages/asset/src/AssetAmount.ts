@@ -5,9 +5,10 @@ export interface IAssetAmountMetadata {
   id?: string;
   assetId: string;
   decimals: number;
+  [key: string]: any;
 }
 
-export class AssetRatio<T extends IAssetAmountMetadata = IAssetAmountMetadata> {
+export class AssetRatio<T extends IAssetAmountMetadata> {
   // eslint-disable-next-line no-useless-constructor
   constructor(
     public numerator: AssetAmount<T>,
@@ -21,7 +22,7 @@ export class AssetRatio<T extends IAssetAmountMetadata = IAssetAmountMetadata> {
  * @extends {IAssetAmountMetadata}
  * @implements {TFungibleToken}
  */
-export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
+export class AssetAmount<T extends IAssetAmountMetadata = any>
   implements TFungibleToken
 {
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
@@ -53,10 +54,10 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
    * @param {number | T} metadata - The metadata associated with the asset amount.
    * @returns {AssetAmount} - A new AssetAmount instance.
    */
-  static fromValue<T extends IAssetAmountMetadata = IAssetAmountMetadata>(
+  static fromValue<T extends IAssetAmountMetadata = any>(
     value: TFractionLike,
     metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
-  ): AssetAmount {
+  ): AssetAmount<T> {
     let decimals = typeof metadata === "number" ? metadata : metadata.decimals;
     return new AssetAmount<T>(
       Fraction.asFraction(value).multiply(10 ** decimals).quotient,
@@ -80,14 +81,14 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
-  withAmount = <T extends IAssetAmountMetadata = IAssetAmountMetadata>(
+  withAmount = <T extends IAssetAmountMetadata = any>(
     amount: TIntegerLike,
     metadata?: T
   ): AssetAmount => {
     return new AssetAmount<T>(amount, metadata);
   };
 
-  withValue = <T extends IAssetAmountMetadata = IAssetAmountMetadata>(
+  withValue = <T extends IAssetAmountMetadata = any>(
     value: TFractionLike,
     metadata?: T
   ): AssetAmount => {
