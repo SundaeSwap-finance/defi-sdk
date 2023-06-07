@@ -23,10 +23,62 @@ beforeEach(() => {
 });
 
 describe("AssetAmount", () => {
-  test("value is computed correctly", async () => {
-    expect(new AssetAmount(1, 0).value.toString()).toBe("1");
-    expect(new AssetAmount(1, 1).value.toString()).toBe("0.1");
-    expect(new AssetAmount(1, 10).value.toString()).toBe(`0.${"0".repeat(9)}1`);
+  it("should compute value correctly", async () => {
+    const zeroDecimals = { assetId: "zero", decimals: 0 };
+    const oneDecimal = { assetId: "one", decimals: 1 };
+    const sixDecimals = { assetId: "six", decimals: 6 };
+    const tenDecimals = { assetId: "ten", decimals: 10 };
+
+    expect(new AssetAmount(1, zeroDecimals).value.toString()).toBe("1");
+    expect(new AssetAmount(1, oneDecimal).value.toString()).toBe("0.1");
+    expect(new AssetAmount(1, tenDecimals).value.toString()).toBe(
+      `0.${"0".repeat(9)}1`
+    );
+    expect(new AssetAmount(1000000, sixDecimals).value.toString()).toBe("1");
+
+    expect(new AssetAmount(1, zeroDecimals.decimals).value.toString()).toBe(
+      "1"
+    );
+    expect(new AssetAmount(1, oneDecimal.decimals).value.toString()).toBe(
+      "0.1"
+    );
+    expect(new AssetAmount(1, tenDecimals.decimals).value.toString()).toBe(
+      `0.${"0".repeat(9)}1`
+    );
+    expect(
+      new AssetAmount(1000000, sixDecimals.decimals).value.toString()
+    ).toBe("1");
+  });
+
+  it("should should compute fromValue correctly", () => {
+    const sixDecimals = { assetId: "test", decimals: 6 };
+    const zeroDecimals = { assetId: "test-2", decimals: 0 };
+
+    expect(AssetAmount.fromValue(2.25, sixDecimals).amount).toBe(2250000n);
+    expect(AssetAmount.fromValue(2.25, sixDecimals).value.toNumber()).toBe(
+      2.25
+    );
+    expect(AssetAmount.fromValue(1, sixDecimals).value.toNumber()).toBe(1);
+    expect(AssetAmount.fromValue(1, sixDecimals).amount).toBe(1000000n);
+    expect(AssetAmount.fromValue(1, zeroDecimals).value.toNumber()).toBe(1);
+    expect(AssetAmount.fromValue(1, zeroDecimals).amount).toBe(1n);
+
+    expect(AssetAmount.fromValue(2.25, sixDecimals.decimals).amount).toBe(
+      2250000n
+    );
+    expect(
+      AssetAmount.fromValue(2.25, sixDecimals.decimals).value.toNumber()
+    ).toBe(2.25);
+    expect(
+      AssetAmount.fromValue(1, sixDecimals.decimals).value.toNumber()
+    ).toBe(1);
+    expect(AssetAmount.fromValue(1, sixDecimals.decimals).amount).toBe(
+      1000000n
+    );
+    expect(
+      AssetAmount.fromValue(1, zeroDecimals.decimals).value.toNumber()
+    ).toBe(1);
+    expect(AssetAmount.fromValue(1, zeroDecimals.decimals).amount).toBe(1n);
   });
 });
 
