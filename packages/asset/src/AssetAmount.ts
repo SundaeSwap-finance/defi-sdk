@@ -87,12 +87,10 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withAmount = (amount: TIntegerLike): AssetAmount => {
     return new AssetAmount<T>(amount, this.decimals);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withValue = (value: TFractionLike): AssetAmount => {
     return AssetAmount.fromValue<T>(value, this.decimals);
   };
