@@ -33,6 +33,8 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     "Cannot perform exchange calculation on an AssetAmount with no metadata.";
   static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
   static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
+  static INVALID_DECIMAL_ERROR =
+    "Cannot perform addition or subtraction on AssetAmounts with different decimals.";
 
   readonly metadata: T;
   readonly id: string;
@@ -86,27 +88,27 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  withAmount = <T extends IAssetAmountMetadata = any>(
-    amount: TIntegerLike,
-    metadata?: T
-  ): AssetAmount => {
-    return new AssetAmount<T>(amount, metadata);
+  withAmount = (amount: TIntegerLike): AssetAmount => {
+    return new AssetAmount<T>(amount, this.decimals);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  withValue = <T extends IAssetAmountMetadata = any>(
-    value: TFractionLike,
-    metadata?: T
-  ): AssetAmount => {
-    return AssetAmount.fromValue<T>(value, metadata);
+  withValue = (value: TFractionLike): AssetAmount => {
+    return AssetAmount.fromValue<T>(value, this.decimals);
   };
 
   add = (rhs: AssetAmount): AssetAmount => {
+    if (this.decimals !== rhs.decimals) {
+      throw new Error(AssetAmount.INVALID_DECIMAL_ERROR);
+    }
     return this.withAmount(this.amount + rhs.amount);
   };
   plus = this.add;
 
   subtract = (rhs: AssetAmount): AssetAmount => {
+    if (this.decimals !== rhs.decimals) {
+      throw new Error(AssetAmount.INVALID_DECIMAL_ERROR);
+    }
     return this.withAmount(this.amount - rhs.amount);
   };
   minus = this.subtract;

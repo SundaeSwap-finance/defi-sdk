@@ -50,7 +50,7 @@ describe("AssetAmount", () => {
     ).toBe("1");
   });
 
-  it("should should compute fromValue correctly", () => {
+  it("should compute fromValue correctly", () => {
     const sixDecimals = { assetId: "test", decimals: 6 };
     const zeroDecimals = { assetId: "test-2", decimals: 0 };
 
@@ -79,6 +79,58 @@ describe("AssetAmount", () => {
       AssetAmount.fromValue(1, zeroDecimals.decimals).value.toNumber()
     ).toBe(1);
     expect(AssetAmount.fromValue(1, zeroDecimals.decimals).amount).toBe(1n);
+  });
+
+  it("should add values correctly", () => {
+    const sixDecimals = { assetId: "six", decimals: 6 };
+
+    expect(
+      new AssetAmount(1000000, sixDecimals).add(
+        new AssetAmount(5000000, sixDecimals)
+      ).amount
+    ).toEqual(6000000n);
+
+    expect(
+      new AssetAmount(1000000, 6).add(new AssetAmount(5000000, sixDecimals))
+        .amount
+    ).toEqual(6000000n);
+
+    expect(
+      new AssetAmount(1000000, sixDecimals).add(new AssetAmount(5000000, 6))
+        .amount
+    ).toEqual(6000000n);
+
+    expect(
+      () => new AssetAmount(1000000, 0).add(new AssetAmount(5000000, 6)).amount
+    ).toThrowError(AssetAmount.INVALID_DECIMAL_ERROR);
+  });
+
+  it("should subtract values correctly", () => {
+    const sixDecimals = { assetId: "six", decimals: 6 };
+
+    expect(
+      new AssetAmount(10000000, sixDecimals).subtract(
+        new AssetAmount(5000000, sixDecimals)
+      ).amount
+    ).toEqual(5000000n);
+
+    expect(
+      new AssetAmount(10000000, 6).subtract(
+        new AssetAmount(5000000, sixDecimals)
+      ).amount
+    ).toEqual(5000000n);
+
+    expect(
+      new AssetAmount(10000000, sixDecimals).subtract(
+        new AssetAmount(5000000, 6)
+      ).amount
+    ).toEqual(5000000n);
+
+    expect(
+      () =>
+        new AssetAmount(10000000, 0).subtract(new AssetAmount(5000000, 6))
+          .amount
+    ).toThrowError(AssetAmount.INVALID_DECIMAL_ERROR);
   });
 });
 
