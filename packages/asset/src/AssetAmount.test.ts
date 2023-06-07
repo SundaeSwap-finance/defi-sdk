@@ -100,9 +100,12 @@ describe("AssetAmount", () => {
         .amount
     ).toEqual(6000000n);
 
-    expect(
-      () => new AssetAmount(1000000, 0).add(new AssetAmount(5000000, 6)).amount
-    ).toThrowError(AssetAmount.INVALID_DECIMAL_ERROR);
+    const spyConsole = jest.spyOn(global.console, "warn");
+    new AssetAmount(1000000, 0).add(new AssetAmount(5000000, 6));
+    expect(spyConsole).toHaveBeenCalledWith(
+      AssetAmount.INVALID_DECIMAL_WARNING
+    );
+    spyConsole.mockReset();
   });
 
   it("should subtract values correctly", () => {
@@ -126,11 +129,12 @@ describe("AssetAmount", () => {
       ).amount
     ).toEqual(5000000n);
 
-    expect(
-      () =>
-        new AssetAmount(10000000, 0).subtract(new AssetAmount(5000000, 6))
-          .amount
-    ).toThrowError(AssetAmount.INVALID_DECIMAL_ERROR);
+    const spyConsole = jest.spyOn(global.console, "warn");
+    new AssetAmount(10000000, 0).subtract(new AssetAmount(5000000, 6));
+    expect(spyConsole).toHaveBeenCalledWith(
+      AssetAmount.INVALID_DECIMAL_WARNING
+    );
+    spyConsole.mockReset();
   });
 });
 

@@ -33,7 +33,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     "Cannot perform exchange calculation on an AssetAmount with no metadata.";
   static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
   static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
-  static INVALID_DECIMAL_ERROR =
+  static INVALID_DECIMAL_WARNING =
     "Cannot perform addition or subtraction on AssetAmounts with different decimals.";
 
   readonly metadata: T;
@@ -97,7 +97,8 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
 
   add = (rhs: AssetAmount): AssetAmount => {
     if (this.decimals !== rhs.decimals) {
-      throw new Error(AssetAmount.INVALID_DECIMAL_ERROR);
+      // eslint-disable-next-line no-console
+      console.warn(AssetAmount.INVALID_DECIMAL_WARNING);
     }
     return this.withAmount(this.amount + rhs.amount);
   };
@@ -105,7 +106,8 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
 
   subtract = (rhs: AssetAmount): AssetAmount => {
     if (this.decimals !== rhs.decimals) {
-      throw new Error(AssetAmount.INVALID_DECIMAL_ERROR);
+      // eslint-disable-next-line no-console
+      console.warn(AssetAmount.INVALID_DECIMAL_WARNING);
     }
     return this.withAmount(this.amount - rhs.amount);
   };
