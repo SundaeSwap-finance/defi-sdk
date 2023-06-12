@@ -20,6 +20,17 @@ const testRatio4 = new AssetRatio(
   new AssetAmount(10000000n, 6)
 );
 
+const testPool: IAssetRatioPool = {
+  assetA: {
+    assetId: "assetA",
+    decimals: 6,
+  },
+  assetB: {
+    assetId: "assetB",
+    decimals: 6,
+  },
+};
+
 describe("limitPriceFromRatio", () => {
   it("should return the correct limit price", () => {
     expect(testRatio1.getLimitPrice()).toEqual(0.5);
@@ -62,18 +73,16 @@ describe("ratioFromLimitPrice", () => {
     );
   });
 
-  it("should always enforce a correct numerator/denominator when given a pool", () => {
-    const testPool: IAssetRatioPool = {
-      assetA: {
-        assetId: "assetA",
-        decimals: 6,
-      },
-      assetB: {
-        assetId: "assetB",
-        decimals: 6,
-      },
-    };
+  it("should carry over the pool when updating the limit price", () => {
+    const newRatio6 = new AssetRatio(
+      new AssetAmount(10n, 6),
+      new AssetAmount(10n, 6),
+      testPool
+    );
+    expect(newRatio6.updateLimitPrice(1).pool).toBe(testPool);
+  });
 
+  it("should always enforce a correct numerator/denominator when given a pool", () => {
     const testRatioWithPool1 = new AssetRatio(
       new AssetAmount(20000000n, { decimals: 6, assetId: "assetA" }),
       new AssetAmount(10000000n, { decimals: 6, assetId: "assetB" }),

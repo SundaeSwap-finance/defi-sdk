@@ -94,6 +94,6 @@ export class AssetRatio<T extends IAssetAmountMetadata = any> {
       this.numerator?.metadata ?? this.numerator.decimals
     );
 
-    return new AssetRatio<T>(numerator, this.denominator);
+    return new AssetRatio<T>(numerator, this.denominator, this.pool);
   }
 }
