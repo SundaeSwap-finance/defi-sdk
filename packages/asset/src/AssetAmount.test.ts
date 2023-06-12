@@ -1,4 +1,5 @@
-import { AssetAmount, AssetRatio, IAssetAmountMetadata } from "./AssetAmount";
+import { AssetAmount, IAssetAmountMetadata } from "./AssetAmount";
+import { AssetRatio } from "./AssetRatio";
 
 let testAssetAData: IAssetAmountMetadata;
 

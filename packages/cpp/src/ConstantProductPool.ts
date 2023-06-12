@@ -301,7 +301,7 @@ export const getAssetsRatio = (
   const second = Fraction.asFraction(secondValue ?? 0);
 
   if (!first.greaterThan(0) || !second.greaterThan(0)) {
-    return new Fraction(0).toString(10);
+    return "0";
   }
 
   return first.divide(second).toString(10);

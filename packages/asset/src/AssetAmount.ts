@@ -1,5 +1,6 @@
 import { Fraction, TFractionLike, TIntegerLike } from "@sundaeswap/fraction";
 import { IHasStringId, stringIdEquals, TFungibleToken } from "./Asset";
+import { AssetRatio } from "./AssetRatio";
 
 export interface IAssetAmountMetadata {
   id?: string;
@@ -7,15 +8,6 @@ export interface IAssetAmountMetadata {
   decimals: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class AssetRatio<T extends IAssetAmountMetadata = any> {
-  // eslint-disable-next-line no-useless-constructor
-  constructor(
-    public numerator: AssetAmount<T>,
-    public denominator: AssetAmount<T>
-  ) {}
 }
 
 /**
