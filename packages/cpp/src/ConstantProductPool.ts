@@ -15,6 +15,7 @@ export interface IRatioCalculationResult {
   ratioAsFraction: Fraction;
   display: string;
   isDivisible: boolean;
+  belowMinimumRatio: boolean;
 }
 
 export type TPair = [bigint, bigint];
@@ -300,7 +301,7 @@ export const getAssetsRatio = (
   const second = Fraction.asFraction(secondValue ?? 0);
 
   if (!first.greaterThan(0) || !second.greaterThan(0)) {
-    return null;
+    return new Fraction(0).toString(10);
   }
 
   return first.divide(second).toString(10);
@@ -365,5 +366,6 @@ export function getSwapRatio(
     display: calculatedAmount.value.toString(),
     ratioAsFraction: Fraction.asFraction(rawRatio),
     isDivisible: calculatedAmount.decimals > 0,
+    belowMinimumRatio: rawRatio.toString() === "0",
   };
 }

@@ -484,6 +484,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(1n, 2n),
         display: "0",
         isDivisible: false,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -497,6 +498,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(1n, 2n),
         display: "0",
         isDivisible: false,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -510,6 +512,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(2n, 1n),
         display: "2",
         isDivisible: false,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -523,6 +526,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(1n, 20000n),
         display: "50",
         isDivisible: false,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -536,6 +540,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(20000n, 1n),
         display: "0.02",
         isDivisible: true,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -549,6 +554,7 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(5000n, 1n),
         display: "0.005",
         isDivisible: true,
+        belowMinimumRatio: false,
       },
     },
     {
@@ -562,6 +568,21 @@ describe("getSwapRatio", () => {
         ratioAsFraction: new Fraction(1n, 5000n),
         display: "200",
         isDivisible: false,
+        belowMinimumRatio: false,
+      },
+    },
+    {
+      direction: "A_PER_B",
+      assets: [
+        { quantity: 0n, decimals: 6, assetId: "A" },
+        { quantity: 1n, decimals: 0, assetId: "B" },
+      ],
+      expectedOutput: {
+        calculatedAmount: new AssetAmount(0n),
+        ratioAsFraction: new Fraction(0n, 0n),
+        display: "0",
+        isDivisible: true,
+        belowMinimumRatio: true,
       },
     },
   ];
@@ -569,8 +590,13 @@ describe("getSwapRatio", () => {
   test.each(testCases)(
     "given direction %p and assets %p, returns %p",
     (testCase) => {
-      const { calculatedAmount, ratioAsFraction, display, isDivisible } =
-        getSwapRatio(testCase.direction, testCase.assets);
+      const {
+        calculatedAmount,
+        ratioAsFraction,
+        display,
+        isDivisible,
+        belowMinimumRatio,
+      } = getSwapRatio(testCase.direction, testCase.assets);
       expect(calculatedAmount.amount).toEqual(
         testCase.expectedOutput.calculatedAmount.amount
       );
@@ -580,6 +606,9 @@ describe("getSwapRatio", () => {
       expect(ratioAsFraction).toEqual(testCase.expectedOutput.ratioAsFraction);
       expect(display).toEqual(testCase.expectedOutput.display);
       expect(isDivisible).toEqual(testCase.expectedOutput.isDivisible);
+      expect(belowMinimumRatio).toEqual(
+        testCase.expectedOutput.belowMinimumRatio
+      );
     }
   );
 });
