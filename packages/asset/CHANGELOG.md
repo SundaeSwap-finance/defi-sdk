@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.6](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.5...@sundaeswap/asset@0.6.6) (2023-06-12)
+
+### Bug Fixes
+
+- ensure that pool is carried over when updating limit price ([7bb2019](https://github.com/SundaeSwap-finance/defi-sdk/commit/7bb2019f4008519a88a77c037cefa06e24d36b44))
+
 ## [0.6.5](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.4...@sundaeswap/asset@0.6.5) (2023-06-12)
 
 **Note:** Version bump only for package @sundaeswap/asset
