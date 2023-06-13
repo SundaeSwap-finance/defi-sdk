@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.7](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.6...@sundaeswap/asset@0.6.7) (2023-06-13)
+
+### Bug Fixes
+
+- graceful fallback ([64da05a](https://github.com/SundaeSwap-finance/defi-sdk/commit/64da05a8f4e843c3510bc5c12201130a575f55b0))
+- overly strict object comparison was returning false ([70d29ac](https://github.com/SundaeSwap-finance/defi-sdk/commit/70d29acb12fdcd9bcf7230e92cc7b184fbc3cab8))
+
 ## [0.6.6](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.5...@sundaeswap/asset@0.6.6) (2023-06-12)
 
 ### Bug Fixes
