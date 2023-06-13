@@ -170,7 +170,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
    * @returns {AssetAmount} - A new AssetAmount representing the result of the operation.
    */
   exchangeAt(ar: AssetRatio<T>): AssetAmount {
-    if (this.metadata.assetId === ar.denominator.metadata.assetId) {
+    if (this.metadata?.assetId === ar.denominator.metadata?.assetId) {
       return this.exchangeMultiply(ar);
     } else {
       return this.exchangeDivide(ar);
