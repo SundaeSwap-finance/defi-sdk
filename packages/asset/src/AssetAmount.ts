@@ -23,8 +23,6 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
   static INVALID_METADATA =
     "Cannot perform exchange calculation on an AssetAmount with no metadata.";
-  static INVALID_MULTIPLICATION_ERROR = "Cannot multiply incompatible assets.";
-  static INVALID_DIVISION_ERROR = "Cannot divide incompatible assets.";
   static INVALID_DECIMAL_WARNING =
     "Cannot perform addition or subtraction on AssetAmounts with different decimals.";
 
@@ -133,10 +131,6 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
       throw new Error(AssetAmount.INVALID_METADATA);
     }
 
-    if (this.metadata !== ar.denominator.metadata) {
-      throw new Error(AssetAmount.INVALID_MULTIPLICATION_ERROR);
-    }
-
     return new AssetAmount<T>(
       (this.amount * ar.numerator.amount) / ar.denominator.amount,
       ar.numerator.metadata
@@ -152,10 +146,6 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
   exchangeDivide(ar: AssetRatio<T>): AssetAmount {
     if (!this.metadata || !ar.denominator.metadata || !ar.numerator.metadata) {
       throw new Error(AssetAmount.INVALID_METADATA);
-    }
-
-    if (this.metadata !== ar.numerator.metadata) {
-      throw new Error(AssetAmount.INVALID_DIVISION_ERROR);
     }
 
     return new AssetAmount<T>(

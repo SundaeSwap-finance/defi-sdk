@@ -190,13 +190,6 @@ describe("AssetAmount with metadata", () => {
 
   it("should throw correct errors", () => {
     const ratio = new AssetRatio(testAssetA, testAssetB);
-    expect(() => testAssetB.exchangeDivide(ratio)).toThrowError(
-      AssetAmount.INVALID_DIVISION_ERROR
-    );
-    expect(() => testAssetA.exchangeMultiply(ratio)).toThrowError(
-      AssetAmount.INVALID_MULTIPLICATION_ERROR
-    );
-
     const assetAmountWithoutMetadata = new AssetAmount(10n, 6);
     const assetAmountWithoutMetadata2 = new AssetAmount(10n, 0);
     const ratioWithoutMetadata = new AssetRatio(
