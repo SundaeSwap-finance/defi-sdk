@@ -77,12 +77,12 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
-  withAmount = (amount: TIntegerLike): AssetAmount => {
-    return new AssetAmount<T>(amount, this.decimals);
+  withAmount = (amount: TIntegerLike): AssetAmount<T> => {
+    return new AssetAmount<T>(amount, this?.metadata ?? this.decimals);
   };
 
-  withValue = (value: TFractionLike): AssetAmount => {
-    return AssetAmount.fromValue<T>(value, this.decimals);
+  withValue = (value: TFractionLike): AssetAmount<T> => {
+    return AssetAmount.fromValue<T>(value, this?.metadata ?? this.decimals);
   };
 
   add = (rhs: AssetAmount): AssetAmount => {
