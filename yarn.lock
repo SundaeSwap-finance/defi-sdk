@@ -1846,10 +1846,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sundaeswap/asset@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@sundaeswap/asset/-/asset-0.5.9.tgz#7fa80ded83cdbbf4505380c38bffc7845145f67c"
-  integrity sha512-Mpq8pOxCCKCrx2tp0zce2aqqxw8GXGOAU834SD2ovHORIojRKrswZKgLgji1jQMujfB9F9xQlY7MKFvtFdD97Q==
+"@sundaeswap/asset@^0.6.9":
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/asset/-/asset-0.6.9.tgz#0d5f956edc14d597c83a1fc48c475b6b771ecf9b"
+  integrity sha512-oYNcYBABjgizGUIjt8sfDEz25Uwt80pEJ7YrpUMgOOdTx42QPzMQVN6ICO8/WXYlxrK0rgGdfY4seif6SXuO9g==
   dependencies:
     "@sundaeswap/fraction" "^0.5.9"
 
