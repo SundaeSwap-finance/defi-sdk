@@ -577,6 +577,23 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@sundaeswap/asset@^0.6.9":
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/asset/-/asset-0.6.9.tgz#0d5f956edc14d597c83a1fc48c475b6b771ecf9b"
+  integrity sha512-oYNcYBABjgizGUIjt8sfDEz25Uwt80pEJ7YrpUMgOOdTx42QPzMQVN6ICO8/WXYlxrK0rgGdfY4seif6SXuO9g==
+  dependencies:
+    "@sundaeswap/fraction" "^0.5.9"
+
+"@sundaeswap/bigint-math@^0.5.9":
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/bigint-math/-/bigint-math-0.5.9.tgz#b7bec95324f8caa202794f8efd907990b5ac2a84"
+  integrity sha512-TYZwvgpA+aZFAroO0qYQSOn1c1h/IdmCuqS0PZ1mbF8wBdJ7JjDV0wu6onIzXZ3O6SZHlthyN3m6F2PjeYrQfA==
+
+"@sundaeswap/fraction@^0.5.9":
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/@sundaeswap/fraction/-/fraction-0.5.9.tgz#cd97f453bee9b9933ec98d1287fdeca28ea6cdb8"
+  integrity sha512-3KamPkKlXj6oLY1NNb4QjwKc0p+2MUthEGbFl4S9hf7qdxH5HWE4itcbsMpLOmEHWWy1N3fzUffuVkPWsyddZg==
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
