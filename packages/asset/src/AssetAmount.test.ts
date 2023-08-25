@@ -150,6 +150,15 @@ describe("AssetAmount with metadata", () => {
     expect(testAssetB.metadata).toEqual(testAssetBData);
   });
 
+  it("withMetadata()", () => {
+    const basic = new AssetAmount(25n, 6);
+    const withMetadata = basic.withMetadata(testAssetAData);
+
+    expect(basic.metadata).toBeUndefined();
+    expect(withMetadata.amount).toEqual(basic.amount);
+    expect(withMetadata.metadata).toMatchObject(testAssetAData);
+  });
+
   it("exchangeMultiply()", () => {
     const ratio = new AssetRatio(testAssetA, testAssetB);
     const result = testAssetB.exchangeMultiply(ratio);

@@ -85,6 +85,10 @@ export class AssetAmount<T extends IAssetAmountMetadata = any>
     return AssetAmount.fromValue<T>(value, this?.metadata ?? this.decimals);
   };
 
+  withMetadata = (metadata: T): AssetAmount<T> => {
+    return new AssetAmount(this.amount, metadata);
+  };
+
   add = (rhs: AssetAmount): AssetAmount => {
     if (this.decimals !== rhs.decimals) {
       // eslint-disable-next-line no-console
