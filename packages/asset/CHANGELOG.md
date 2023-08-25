@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.10...@sundaeswap/asset@0.7.0) (2023-08-25)
+
+### Features
+
+- withMetadata ([dbfe646](https://github.com/SundaeSwap-finance/defi-sdk/commit/dbfe646137715421ebff4315a9ad584c76f6b28b))
+
 ## [0.6.10](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/asset@0.6.9...@sundaeswap/asset@0.6.10) (2023-07-03)
 
 **Note:** Version bump only for package @sundaeswap/asset
