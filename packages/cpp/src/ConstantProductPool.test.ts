@@ -476,8 +476,13 @@ describe("getSwapRatio", () => {
     {
       direction: "A_PER_B",
       assets: [
-        { quantity: 100n, decimals: 0, assetId: "A" },
-        { quantity: 200n, decimals: 0, assetId: "B" },
+        { quantity: 100n, decimals: 0, assetId: "ada.lovelace" },
+        {
+          quantity: 200n,
+          decimals: 0,
+          assetId:
+            "9a9693a9a37912a5097918f97918d15240c92ab729a0b7c4aa144d77.53554e444145",
+        },
       ],
       expectedOutput: {
         calculatedAmount: new AssetAmount(0n),
@@ -490,8 +495,13 @@ describe("getSwapRatio", () => {
     {
       direction: "A_PER_B",
       assets: [
-        { quantity: 200n, decimals: 0, assetId: "B" },
-        { quantity: 100n, decimals: 0, assetId: "A" },
+        {
+          quantity: 200n,
+          decimals: 0,
+          assetId:
+            "9a9693a9a37912a5097918f97918d15240c92ab729a0b7c4aa144d77.53554e444145",
+        },
+        { quantity: 100n, decimals: 0, assetId: "ada.lovelace" },
       ],
       expectedOutput: {
         calculatedAmount: new AssetAmount(0n),
@@ -504,8 +514,13 @@ describe("getSwapRatio", () => {
     {
       direction: "B_PER_A",
       assets: [
-        { quantity: 200n, decimals: 0, assetId: "B" },
-        { quantity: 100n, decimals: 0, assetId: "A" },
+        {
+          quantity: 200n,
+          decimals: 0,
+          assetId:
+            "9a9693a9a37912a5097918f97918d15240c92ab729a0b7c4aa144d77.53554e444145",
+        },
+        { quantity: 100n, decimals: 0, assetId: "ada.lovelace" },
       ],
       expectedOutput: {
         calculatedAmount: new AssetAmount(2n),

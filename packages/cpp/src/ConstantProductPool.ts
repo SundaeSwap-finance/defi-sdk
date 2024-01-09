@@ -343,9 +343,22 @@ export function getSwapRatio(
 ): IRatioCalculationResult {
   let calculatedAmount: AssetAmount;
   let rawRatio: string;
-  const [firstAsset, secondAsset] = assets.sort((a, b) =>
-    a.assetId.localeCompare(b.assetId)
-  );
+  const adaIds = ["", ".", "ada.lovelace"];
+
+  const [firstAsset, secondAsset] = assets.sort((a, b) => {
+    const isASpecial = adaIds.includes(a.assetId);
+    const isBSpecial = adaIds.includes(b.assetId);
+
+    if (isASpecial && !isBSpecial) {
+      return -1;
+    }
+
+    if (!isASpecial && isBSpecial) {
+      return 1;
+    }
+
+    return a.assetId.localeCompare(b.assetId);
+  });
 
   if (direction === "A_PER_B") {
     rawRatio = getAssetsRatio(firstAsset.quantity, secondAsset.quantity);
