@@ -31,5 +31,8 @@
     "watch": "bun run clean && bun run build && bun run build:esm --watch",
     "set-cjs": "echo '{ \"type\": \"commonjs\" }' > ./dist/cjs/package.json",
     "clean": "rm -rf ./dist"
+  },
+  "dependencies": {
+    "json-bigint": "1.0.0"
   }
 }
