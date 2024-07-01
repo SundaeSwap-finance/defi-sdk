@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/fraction@1.0.4...@sundaeswap/fraction@1.0.5) (2024-07-01)
+
+### Bug Fixes
+
+- package type ([326db96](https://github.com/SundaeSwap-finance/defi-sdk/commit/326db962e62ca077ff02aba28a92f24f51a70ec8))
+
 ## [1.0.4](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/fraction@1.0.3...@sundaeswap/fraction@1.0.4) (2024-07-01)
 
 ### Bug Fixes
