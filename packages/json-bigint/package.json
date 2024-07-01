@@ -5,6 +5,7 @@
   "repository": "https://github.com/sundaeswap-finance/defi-sdk/tree/master/packages/json-bigint",
   "license": "MIT",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",

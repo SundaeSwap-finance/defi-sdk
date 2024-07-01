@@ -6,6 +6,7 @@
     "name": "SundaeSwap Labs, Inc.",
     "url": "https://www.sundaeswap.finance/"
   },
+  "type": "module",
   "license": "UNLICENSED",
   "sideEffects": false,
   "exports": {
