@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.6.1 (2024-07-01)
+
+## 0.5.9 (2023-05-09)
+
+## 0.5.7 (2023-05-09)
+
+### Bug Fixes
+
+- old package references ([cc25bc1](https://github.com/sundaeswap-finance/defi-sdk/commit/cc25bc1728bfdd64b711e31b7153239d3c8d339f))
+
+# 0.5.0 (2022-08-02)
+
+# 0.4.0 (2022-07-05)
+
+## 0.3.1 (2022-07-05)
+
+### Bug Fixes
+
+- build esm dist correctly ([1fe3975](https://github.com/sundaeswap-finance/defi-sdk/commit/1fe3975ace34900c846fc820f15766706e34351c))
+
+# 0.3.0 (2022-07-02)
+
+## 0.2.3 (2022-07-02)
+
+## 0.2.2 (2022-07-01)
+
+## 0.2.1 (2022-06-08)
+
+# 0.2.0 (2022-06-07)
+
+## 0.1.3 (2022-06-07)
+
+## 0.1.2 (2022-06-02)
+
+## 0.1.1 (2022-06-02)
+
+# 0.1.0 (2022-06-02)
+
+### Features
+
+- **bigint-math:** init package ([de0af5f](https://github.com/sundaeswap-finance/defi-sdk/commit/de0af5f41f5f9b782b9b2f4a84e2015573707111))
+
 ## [0.5.9](https://github.com/sundaeswap-finance/defi-sdk/compare/v0.5.7...v0.5.9) (2023-05-09)
 
 **Note:** Version bump only for package @sundaeswap/bigint-math

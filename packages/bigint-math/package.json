@@ -1,6 +1,6 @@
 {
   "name": "@sundaeswap/bigint-math",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Minimal BigIntMath library",
   "repository": "https://github.com/sundaeswap-finance/defi-sdk/tree/master/packages/bigint-math",
   "license": "MIT",
