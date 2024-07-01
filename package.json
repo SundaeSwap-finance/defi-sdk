@@ -24,8 +24,8 @@
     "clean": "lerna run clean",
     "build": "lerna run build --scope '@sundaeswap/*'",
     "prepare": "husky",
-    "version:ci": "bun run version -y --ignore-scripts",
-    "publish:ci": "bun run publish from-package -y"
+    "version": "lerna version patch --y",
+    "publish": "lerna publish from-package -y"
   },
   "devDependencies": {
     "@sundaeswap/babel-preset": "2.0.12",
