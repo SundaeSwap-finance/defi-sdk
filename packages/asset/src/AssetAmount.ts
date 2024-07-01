@@ -1,7 +1,7 @@
 import { Fraction, TFractionLike, TIntegerLike } from "@sundaeswap/fraction";
 
-import { IHasStringId, stringIdEquals, TFungibleToken } from "./Asset";
-import { AssetRatio } from "./AssetRatio";
+import { IHasStringId, stringIdEquals, TFungibleToken } from "./Asset.js";
+import { AssetRatio } from "./AssetRatio.js";
 
 export interface IAssetAmountExtraMetadata {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,15 +52,16 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
    * @param {number | T} metadata - The metadata associated with the asset amount.
    * @returns {AssetAmount<T>} - A new AssetAmount instance.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   static fromValue<T extends IAssetAmountMetadata = IAssetAmountMetadata>(
     value: TFractionLike,
-    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
+    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
   ): AssetAmount<T> {
-    let decimals = typeof metadata === "number" ? metadata : metadata.decimals;
+    const decimals =
+      typeof metadata === "number" ? metadata : metadata.decimals;
     return new AssetAmount<T>(
       Fraction.asFraction(value).multiply(10 ** decimals).quotient,
-      metadata
+      metadata,
     );
   }
 
@@ -71,7 +72,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
    */
   constructor(
     amount: TIntegerLike = 0n,
-    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS
+    metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
   ) {
     this.amount = BigInt(amount);
     this.decimals = typeof metadata === "number" ? metadata : metadata.decimals;
@@ -140,7 +141,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
 
     return new AssetAmount<T>(
       (this.amount * ar.numerator.amount) / ar.denominator.amount,
-      ar.numerator.metadata
+      ar.numerator.metadata,
     );
   }
 
@@ -157,7 +158,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
 
     return new AssetAmount<T>(
       (this.amount * ar.denominator.amount) / ar.numerator.amount,
-      ar.denominator.metadata
+      ar.denominator.metadata,
     );
   }
 

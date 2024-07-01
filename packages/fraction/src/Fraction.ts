@@ -76,7 +76,7 @@ export class Fraction {
 
   constructor(
     numerator: TIntegerLike | [bigint, bigint],
-    denominator?: TIntegerLike
+    denominator?: TIntegerLike,
   ) {
     if (Array.isArray(numerator)) {
       [numerator, denominator] = numerator;
@@ -94,7 +94,7 @@ export class Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator + rhs.numerator * this.denominator,
-      this.denominator * rhs.denominator
+      this.denominator * rhs.denominator,
     );
   }
 
@@ -103,7 +103,7 @@ export class Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator - rhs.numerator * this.denominator,
-      this.denominator * rhs.denominator
+      this.denominator * rhs.denominator,
     );
   }
 
@@ -112,7 +112,7 @@ export class Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.numerator,
-      this.denominator * rhs.denominator
+      this.denominator * rhs.denominator,
     );
   }
 
@@ -121,7 +121,7 @@ export class Fraction {
     rhs = Fraction.asFraction(rhs);
     return new Fraction(
       this.numerator * rhs.denominator,
-      this.denominator * rhs.numerator
+      this.denominator * rhs.numerator,
     );
   }
 
@@ -204,18 +204,6 @@ export class Fraction {
           .padStart(decimals, "0")
           .replace(/0*$/, "");
   }
-
-  // toLocaleString(locale?: string, decimals = Fraction.MAX_DECIMALS): string {
-  //   const formattedIntegerPart = Intl.NumberFormat(locale).format(
-  //     this.getQuotient()
-  //   );
-  //   const formattedFractionalPart = this.remainderToString(decimals);
-  //   return formattedFractionalPart
-  //     ? `${formattedIntegerPart}${getDecimalSeparator(
-  //         locale
-  //       )}${formattedFractionalPart}`
-  //     : formattedIntegerPart;
-  // }
 
   toNumber(decimals = Fraction.MAX_DECIMALS): number {
     return Number(this.toString(decimals));

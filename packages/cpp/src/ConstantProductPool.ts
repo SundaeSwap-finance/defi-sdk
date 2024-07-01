@@ -62,7 +62,7 @@ export const calculateLiquidity = (
   b: bigint,
   aReserve: bigint,
   bReserve: bigint,
-  totalLp: bigint
+  totalLp: bigint,
 ) => {
   if (aReserve === 0n || bReserve === 0n) {
     throw new Error("Not enough pool liquidity");
@@ -113,7 +113,7 @@ export const addLiquidity = (
   a: bigint,
   aReserve: bigint,
   bReserve: bigint,
-  totalLp: bigint
+  totalLp: bigint,
 ) => {
   const nextTotalLp = new Fraction(totalLp * (a + aReserve), aReserve).quotient;
   const lp = nextTotalLp - totalLp;
@@ -122,7 +122,7 @@ export const addLiquidity = (
 
   if (b.quotient === 0n) {
     throw new Error(
-      "The provided a asset is not enough to equal at least 1 of the b asset."
+      "The provided a asset is not enough to equal at least 1 of the b asset.",
     );
   }
 
@@ -152,7 +152,7 @@ export const getTokensForLp = (
   lp: bigint,
   aReserve: bigint,
   bReserve: bigint,
-  totalLp: bigint
+  totalLp: bigint,
 ): TPair => [
   new Fraction(lp * aReserve, totalLp).quotient,
   new Fraction(lp * bReserve, totalLp).quotient,
@@ -184,7 +184,7 @@ export const getSwapOutput = (
   inputReserve: bigint,
   outputReserve: bigint,
   fee: TFractionLike,
-  roundOutputUp?: boolean
+  roundOutputUp?: boolean,
 ): TSwapOutcome => {
   if (input <= 0 || inputReserve <= 0 || outputReserve <= 0)
     throw new Error("Input and reserves must be positive");
@@ -244,7 +244,7 @@ export const getSwapInput = (
   output: bigint,
   inputReserve: bigint,
   outputReserve: bigint,
-  fee: TFractionLike
+  fee: TFractionLike,
 ): TSwapOutcome => {
   if (output <= 0 || inputReserve <= 0 || outputReserve <= 0)
     throw new Error("Output and reserves must be positive");
@@ -260,7 +260,7 @@ export const getSwapInput = (
   const input =
     new Fraction(
       inputReserve * output * fee.denominator,
-      (outputReserve - output) * feeDiff
+      (outputReserve - output) * feeDiff,
     ).quotient + 1n;
 
   const inputLpFee = new Fraction(input * fee.numerator, fee.denominator)
@@ -295,7 +295,7 @@ export const getSwapInput = (
  */
 export const getAssetsRatio = (
   firstValue: TFractionLike,
-  secondValue: TFractionLike
+  secondValue: TFractionLike,
 ) => {
   const first = Fraction.asFraction(firstValue ?? 0);
   const second = Fraction.asFraction(secondValue ?? 0);
@@ -339,7 +339,7 @@ export const getAssetsRatio = (
  */
 export function getSwapRatio(
   direction: TRatioDirection,
-  assets: [IRatioCalculationAsset, IRatioCalculationAsset]
+  assets: [IRatioCalculationAsset, IRatioCalculationAsset],
 ): IRatioCalculationResult {
   let calculatedAmount: AssetAmount;
   let rawRatio: string;
@@ -364,13 +364,13 @@ export function getSwapRatio(
     rawRatio = getAssetsRatio(firstAsset.quantity, secondAsset.quantity);
     calculatedAmount = AssetAmount.fromValue(
       Number(rawRatio) * 10 ** (secondAsset.decimals - firstAsset.decimals),
-      firstAsset.decimals
+      firstAsset.decimals,
     );
   } else {
     rawRatio = getAssetsRatio(secondAsset.quantity, firstAsset.quantity);
     calculatedAmount = AssetAmount.fromValue(
       Number(rawRatio) * 10 ** (firstAsset.decimals - secondAsset.decimals),
-      secondAsset.decimals
+      secondAsset.decimals,
     );
   }
 

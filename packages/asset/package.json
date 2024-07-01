@@ -1,7 +1,8 @@
 {
   "name": "@sundaeswap/asset",
-  "version": "0.7.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "A TypeScript interface to handle digital asset amounts along with their respective metadata.",
+  "type": "module",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
     "url": "https://www.sundaeswap.finance/"
@@ -27,14 +28,12 @@
     "access": "public"
   },
   "scripts": {
-    "compile:esm": "yarn tsc --outDir dist/esm  --module esnext  --module esnext",
-    "compile:cjs": "yarn tsc --outDir dist/cjs --module commonjs",
-    "compile:types": "yarn tsc --outDir dist/types --emitDeclarationOnly --declarationMap --declaration",
-    "compile": "yarn compile:cjs && yarn compile:esm && yarn compile:types",
-    "build": "yarn clean && yarn compile",
-    "test": "jest",
-    "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0",
-    "lint:fix": "yarn lint -- --fix",
+    "build:esm": "cross-env BABEL_ENV=esmUnbundled babel src --extensions '.ts,.tsx' --out-dir './dist/esm' --source-maps",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --extensions '.ts,.tsx' --out-dir 'dist/cjs' --source-maps && bun set-cjs",
+    "types": "tsc --project ./tsconfig.json",
+    "build": "bun run clean && bun run types && bun run build:esm && bun run build:cjs",
+    "watch": "bun run clean && bun run build && bun run build:esm --watch",
+    "set-cjs": "echo '{ \"type\": \"commonjs\" }' > ./dist/cjs/package.json",
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
@@ -45,6 +44,6 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@sundaeswap/fraction": "^0.5.9"
+    "@sundaeswap/fraction": "workspace:*"
   }
 }

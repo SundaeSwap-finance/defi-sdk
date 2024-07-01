@@ -1,5 +1,6 @@
-import { AssetAmount, IAssetAmountMetadata } from "./AssetAmount";
-import { AssetRatio } from "./AssetRatio";
+import { beforeEach, describe, it, expect, spyOn } from "bun:test";
+import { AssetAmount, IAssetAmountMetadata } from "../AssetAmount.js";
+import { AssetRatio } from "../AssetRatio.js";
 
 let testAssetAData: IAssetAmountMetadata;
 
@@ -33,21 +34,21 @@ describe("AssetAmount", () => {
     expect(new AssetAmount(1, zeroDecimals).value.toString()).toBe("1");
     expect(new AssetAmount(1, oneDecimal).value.toString()).toBe("0.1");
     expect(new AssetAmount(1, tenDecimals).value.toString()).toBe(
-      `0.${"0".repeat(9)}1`
+      `0.${"0".repeat(9)}1`,
     );
     expect(new AssetAmount(1000000, sixDecimals).value.toString()).toBe("1");
 
     expect(new AssetAmount(1, zeroDecimals.decimals).value.toString()).toBe(
-      "1"
+      "1",
     );
     expect(new AssetAmount(1, oneDecimal.decimals).value.toString()).toBe(
-      "0.1"
+      "0.1",
     );
     expect(new AssetAmount(1, tenDecimals.decimals).value.toString()).toBe(
-      `0.${"0".repeat(9)}1`
+      `0.${"0".repeat(9)}1`,
     );
     expect(
-      new AssetAmount(1000000, sixDecimals.decimals).value.toString()
+      new AssetAmount(1000000, sixDecimals.decimals).value.toString(),
     ).toBe("1");
   });
 
@@ -57,7 +58,7 @@ describe("AssetAmount", () => {
 
     expect(AssetAmount.fromValue(2.25, sixDecimals).amount).toBe(2250000n);
     expect(AssetAmount.fromValue(2.25, sixDecimals).value.toNumber()).toBe(
-      2.25
+      2.25,
     );
     expect(AssetAmount.fromValue(1, sixDecimals).value.toNumber()).toBe(1);
     expect(AssetAmount.fromValue(1, sixDecimals).amount).toBe(1000000n);
@@ -65,19 +66,19 @@ describe("AssetAmount", () => {
     expect(AssetAmount.fromValue(1, zeroDecimals).amount).toBe(1n);
 
     expect(AssetAmount.fromValue(2.25, sixDecimals.decimals).amount).toBe(
-      2250000n
+      2250000n,
     );
     expect(
-      AssetAmount.fromValue(2.25, sixDecimals.decimals).value.toNumber()
+      AssetAmount.fromValue(2.25, sixDecimals.decimals).value.toNumber(),
     ).toBe(2.25);
     expect(
-      AssetAmount.fromValue(1, sixDecimals.decimals).value.toNumber()
+      AssetAmount.fromValue(1, sixDecimals.decimals).value.toNumber(),
     ).toBe(1);
     expect(AssetAmount.fromValue(1, sixDecimals.decimals).amount).toBe(
-      1000000n
+      1000000n,
     );
     expect(
-      AssetAmount.fromValue(1, zeroDecimals.decimals).value.toNumber()
+      AssetAmount.fromValue(1, zeroDecimals.decimals).value.toNumber(),
     ).toBe(1);
     expect(AssetAmount.fromValue(1, zeroDecimals.decimals).amount).toBe(1n);
   });
@@ -87,24 +88,24 @@ describe("AssetAmount", () => {
 
     expect(
       new AssetAmount(1000000, sixDecimals).add(
-        new AssetAmount(5000000, sixDecimals)
-      ).amount
+        new AssetAmount(5000000, sixDecimals),
+      ).amount,
     ).toEqual(6000000n);
 
     expect(
       new AssetAmount(1000000, 6).add(new AssetAmount(5000000, sixDecimals))
-        .amount
+        .amount,
     ).toEqual(6000000n);
 
     expect(
       new AssetAmount(1000000, sixDecimals).add(new AssetAmount(5000000, 6))
-        .amount
+        .amount,
     ).toEqual(6000000n);
 
-    const spyConsole = jest.spyOn(global.console, "warn");
+    const spyConsole = spyOn(global.console, "warn");
     new AssetAmount(1000000, 0).add(new AssetAmount(5000000, 6));
     expect(spyConsole).toHaveBeenCalledWith(
-      AssetAmount.INVALID_DECIMAL_WARNING
+      AssetAmount.INVALID_DECIMAL_WARNING,
     );
     spyConsole.mockReset();
   });
@@ -114,26 +115,26 @@ describe("AssetAmount", () => {
 
     expect(
       new AssetAmount(10000000, sixDecimals).subtract(
-        new AssetAmount(5000000, sixDecimals)
-      ).amount
+        new AssetAmount(5000000, sixDecimals),
+      ).amount,
     ).toEqual(5000000n);
 
     expect(
       new AssetAmount(10000000, 6).subtract(
-        new AssetAmount(5000000, sixDecimals)
-      ).amount
+        new AssetAmount(5000000, sixDecimals),
+      ).amount,
     ).toEqual(5000000n);
 
     expect(
       new AssetAmount(10000000, sixDecimals).subtract(
-        new AssetAmount(5000000, 6)
-      ).amount
+        new AssetAmount(5000000, 6),
+      ).amount,
     ).toEqual(5000000n);
 
-    const spyConsole = jest.spyOn(global.console, "warn");
+    const spyConsole = spyOn(global.console, "warn");
     new AssetAmount(10000000, 0).subtract(new AssetAmount(5000000, 6));
     expect(spyConsole).toHaveBeenCalledWith(
-      AssetAmount.INVALID_DECIMAL_WARNING
+      AssetAmount.INVALID_DECIMAL_WARNING,
     );
     spyConsole.mockReset();
   });
@@ -188,7 +189,7 @@ describe("AssetAmount with metadata", () => {
 
     const ratio2 = new AssetRatio(
       new AssetAmount(250000000n, testAssetAData),
-      new AssetAmount(200n, testAssetBData)
+      new AssetAmount(200n, testAssetBData),
     );
 
     const result3 = testAssetA.exchangeAt(ratio2);
@@ -203,22 +204,22 @@ describe("AssetAmount with metadata", () => {
     const assetAmountWithoutMetadata2 = new AssetAmount(10n, 0);
     const ratioWithoutMetadata = new AssetRatio(
       assetAmountWithoutMetadata,
-      assetAmountWithoutMetadata2
+      assetAmountWithoutMetadata2,
     );
 
     // All AssetAmounts without metadata.
     expect(() =>
-      assetAmountWithoutMetadata.exchangeAt(ratioWithoutMetadata)
+      assetAmountWithoutMetadata.exchangeAt(ratioWithoutMetadata),
     ).toThrowError(AssetAmount.INVALID_METADATA);
 
     // Just incorrect ratio AssetAmounts.
     expect(() => testAssetA.exchangeAt(ratioWithoutMetadata)).toThrowError(
-      AssetAmount.INVALID_METADATA
+      AssetAmount.INVALID_METADATA,
     );
 
     // Just incorrect AssetAmount
     expect(() => assetAmountWithoutMetadata.exchangeAt(ratio)).toThrowError(
-      AssetAmount.INVALID_METADATA
+      AssetAmount.INVALID_METADATA,
     );
   });
 });

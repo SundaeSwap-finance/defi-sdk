@@ -1,4 +1,4 @@
-import { AssetAmount } from "./AssetAmount";
+import { AssetAmount } from "./AssetAmount.js";
 
 /**
  * Mutable

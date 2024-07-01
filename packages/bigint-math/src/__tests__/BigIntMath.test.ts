@@ -1,4 +1,5 @@
-import { abs, max, min, rootNth, sign, sqrt } from "./BigIntMath";
+import { test, describe, expect } from "bun:test";
+import { abs, max, min, rootNth, sign, sqrt } from "../BigIntMath.js";
 
 describe("BigintMath", () => {
   test("min", () => expect(min(1n, -1n, 23n, 4n, -444n)).toBe(-444n));

@@ -1,21 +1,24 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "packages": ["packages/*"],
-  "useWorkspaces": false,
-  "npmClient": "yarn",
+  "useNx": true,
+  "version": "independent",
+  "npmClient": "bun",
   "ignoreChanges": [
     "**/__tests__/**",
     "**/__fixtures__/**",
     "**/*.test.js",
     "**/*.md"
   ],
+  "ignore": "demo",
   "command": {
     "version": {
       "message": "chore(release): publish %s",
       "conventionalCommits": true,
-      "private": false
+      "conventionalGraduate": true,
+      "createRelease": "github",
+      "ignoreScripts": true,
+      "private": false,
+      "allowBranch": ["main"]
     }
-  },
-  "version": "independent",
-  "useNx": false
+  }
 }

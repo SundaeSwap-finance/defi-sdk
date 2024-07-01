@@ -1,6 +1,7 @@
 {
   "private": false,
   "name": "defi-sdk",
+  "type": "module",
   "description": "",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
@@ -11,43 +12,32 @@
   },
   "homepage": "https://github.com/SundaeSwap-finance/defi-sdk#readme",
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "yarn lint --fix"
+    "*.{js,jsx,ts,tsx}": "bun lint --fix"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "lint": "eslint --ext js,jsx,ts,tsx .",
-    "lint:fix": "yarn lint --fix",
-    "bootstrap": "lerna bootstrap",
+    "lint": "eslint --ignore-pattern '**/dist/**'",
+    "lint:fix": "bun run lint --fix",
+    "test": "lerna exec bun test",
     "clean": "lerna run clean",
     "build": "lerna run build --scope '@sundaeswap/*'",
-    "test": "lerna run test --stream --scope '@sundaeswap/*'",
-    "postinstall": "yarn bootstrap",
-    "preinstall": "node tools/preinstall.ts",
-    "prepare": "husky install",
-    "version:ci": "lerna version -y --ignore-scripts",
-    "publish:ci": "lerna publish from-package -y",
-    "canary": "lerna publish from-package -y --canary",
-    "typecheck": "tsc --noEmit"
+    "prepare": "husky",
+    "version:ci": "bun run version -y --ignore-scripts",
+    "publish:ci": "bun run publish from-package -y"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.3",
-    "@sundaeswap/asset": "^0.6.9",
-    "@types/jest": "^28.1.4",
-    "@types/node": "^18.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
-    "eslint": "^8.19.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.5.3",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.1",
-    "jest": "^28.1.2",
-    "lerna": "^5.6.2",
-    "lint-staged": "^13.0.3",
+    "@sundaeswap/babel-preset": "2.0.12",
+    "@sundaeswap/eslint-config": "2.0.11",
+    "@sundaeswap/prettier-config": "2.0.10",
+    "@types/bun": "1.1.6",
+    "@types/node": "^20.14.9",
+    "husky": "^9.0.11",
+    "lerna": "^8.1.5",
+    "lint-staged": "^15.2.7",
     "npm-check-updates": "^15.0.2",
-    "prettier": "^2.7.1",
-    "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.2",
-    "typescript": "^4.7.4"
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2"
   }
 }

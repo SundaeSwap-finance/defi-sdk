@@ -1,4 +1,4 @@
-import { AssetAmount, IAssetAmountMetadata } from "./AssetAmount";
+import { AssetAmount, IAssetAmountMetadata } from "./AssetAmount.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface IAssetRatioPool<T extends IAssetAmountMetadata = any> {
@@ -38,7 +38,7 @@ export class AssetRatio<T extends IAssetAmountMetadata = any> {
   constructor(
     numerator: AssetAmount<T>,
     denominator: AssetAmount<T>,
-    public pool?: IAssetRatioPool
+    public pool?: IAssetRatioPool,
   ) {
     if (pool && numerator?.metadata && denominator?.metadata) {
       this.numerator =
@@ -86,12 +86,12 @@ export class AssetRatio<T extends IAssetAmountMetadata = any> {
 
     const newNumeratorAmount = BigInt(
       Math.round(
-        Number(this.denominator.amount.toString()) * adjustedLimitPrice
-      )
+        Number(this.denominator.amount.toString()) * adjustedLimitPrice,
+      ),
     );
     const numerator = new AssetAmount<T>(
       newNumeratorAmount,
-      this.numerator?.metadata ?? this.numerator.decimals
+      this.numerator?.metadata ?? this.numerator.decimals,
     );
 
     return new AssetRatio<T>(numerator, this.denominator, this.pool);

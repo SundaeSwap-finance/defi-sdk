@@ -1,2 +1,2 @@
-export * as BigIntMath from "./BigIntMath";
-export * from "./BigIntMath";
+export * as BigIntMath from "./BigIntMath.js";
+export * from "./BigIntMath.js";
