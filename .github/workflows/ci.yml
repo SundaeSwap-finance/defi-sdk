@@ -34,13 +34,13 @@ jobs:
 
       # Bump Versions (reinstate after release)
       - name: Bump versions
-        run: bun version
+        run: bun version:ci
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure npm authentication
-        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_ACCESS_TOKEN }}
 
       # Create Release
       - name: Publish
-        run: bun run publish
+        run: bun run publish:ci
