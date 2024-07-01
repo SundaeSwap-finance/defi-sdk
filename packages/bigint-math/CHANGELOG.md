@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/sundaeswap-finance/defi-sdk/compare/@sundaeswap/bigint-math@0.6.2...@sundaeswap/bigint-math@0.6.3) (2024-07-01)
+
+**Note:** Version bump only for package @sundaeswap/bigint-math
+
 ## [0.6.2](https://github.com/sundaeswap-finance/defi-sdk/compare/@sundaeswap/bigint-math@0.6.1...@sundaeswap/bigint-math@0.6.2) (2024-07-01)
 
 **Note:** Version bump only for package @sundaeswap/bigint-math
