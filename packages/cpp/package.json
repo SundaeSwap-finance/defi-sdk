@@ -1,6 +1,6 @@
 {
   "name": "@sundaeswap/cpp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimal rational number library using BigInt",
   "author": {
     "name": "SundaeSwap Labs, Inc.",
@@ -37,9 +37,9 @@
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
+    "@sundaeswap/asset": "workspace:*",
     "@sundaeswap/bigint-math": "workspace:*",
-    "@sundaeswap/fraction": "workspace:*",
-    "@sundaeswap/asset": "workspace:*"
+    "@sundaeswap/fraction": "workspace:*"
   },
   "peerDependencies": {
     "@sundaeswap/asset": "^1.0.0",

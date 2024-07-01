@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2024-07-01)
+
+## 0.5.9 (2023-05-09)
+
+## 0.5.7 (2023-05-09)
+
+### Bug Fixes
+
+- old package references ([cc25bc1](https://github.com/SundaeSwap-finance/defi-sdk/commit/cc25bc1728bfdd64b711e31b7153239d3c8d339f))
+
+## 0.5.4 (2023-05-04)
+
+# 0.5.0 (2022-08-02)
+
+# 0.4.0 (2022-07-05)
+
+## 0.3.1 (2022-07-05)
+
+### Bug Fixes
+
+- build esm dist correctly ([1fe3975](https://github.com/SundaeSwap-finance/defi-sdk/commit/1fe3975ace34900c846fc820f15766706e34351c))
+
+# 0.3.0 (2022-07-02)
+
+## 0.2.3 (2022-07-02)
+
+## 0.2.2 (2022-07-01)
+
+## 0.2.1 (2022-06-08)
+
+# 0.2.0 (2022-06-07)
+
+## 0.1.3 (2022-06-07)
+
+### Bug Fixes
+
+- **Fraction:** parse negative numbers correctly, more tests ([a7e8f04](https://github.com/SundaeSwap-finance/defi-sdk/commit/a7e8f043dded0b32333e202363d467bff47751a6))
+
+## 0.1.2 (2022-06-02)
+
+## 0.1.1 (2022-06-02)
+
+# 0.1.0 (2022-06-02)
+
+### Features
+
+- **fraction:** init package ([d9124ef](https://github.com/SundaeSwap-finance/defi-sdk/commit/d9124ef091a7b61a8e1bbd0e56cdca342d77a390))
+- setup ci workflow ([af9cd48](https://github.com/SundaeSwap-finance/defi-sdk/commit/af9cd48d434d2d1d71bb0ff529dac23a8788e360))
+
 ## [0.5.9](https://github.com/SundaeSwap-finance/defi-sdk/compare/v0.5.7...v0.5.9) (2023-05-09)
 
 **Note:** Version bump only for package @sundaeswap/fraction
