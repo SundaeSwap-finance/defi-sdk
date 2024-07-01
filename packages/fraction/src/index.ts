@@ -1,1 +1,1 @@
-export * from "./Fraction";
+export * from "./Fraction.js";
