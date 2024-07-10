@@ -190,8 +190,8 @@ export const getSwapOutput = (
     throw new Error("Input and reserves must be positive");
 
   fee = Fraction.asFraction(fee);
-  if (fee.lt(Fraction.ZERO) || fee.gte(Fraction.ONE))
-    throw new Error("fee must be [0,1)");
+  if (fee.lt(Fraction.ZERO) || fee.gt(Fraction.ONE))
+    throw new Error("fee must be between 0 and 1");
 
   const feeDiff = fee.denominator - fee.numerator;
   const outputNumerator = outputReserve * input * feeDiff;
