@@ -26,8 +26,6 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
   static INVALID_METADATA =
     "Cannot perform exchange calculation on an AssetAmount with no metadata.";
-  static INVALID_DECIMAL_WARNING =
-    "Cannot perform addition or subtraction on AssetAmounts with different decimals.";
 
   readonly metadata: T;
   readonly id: string;
@@ -94,19 +92,11 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   }
 
   add = (rhs: AssetAmount): AssetAmount<T> => {
-    if (this.decimals !== rhs.decimals) {
-      // eslint-disable-next-line no-console
-      console.warn(AssetAmount.INVALID_DECIMAL_WARNING);
-    }
     return this.withAmount(this.amount + rhs.amount);
   };
   plus = this.add;
 
   subtract = (rhs: AssetAmount): AssetAmount<T> => {
-    if (this.decimals !== rhs.decimals) {
-      // eslint-disable-next-line no-console
-      console.warn(AssetAmount.INVALID_DECIMAL_WARNING);
-    }
     return this.withAmount(this.amount - rhs.amount);
   };
   minus = this.subtract;

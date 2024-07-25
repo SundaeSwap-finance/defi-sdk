@@ -1,4 +1,4 @@
-import { beforeEach, describe, it, expect, spyOn } from "bun:test";
+import { beforeEach, describe, it, expect } from "bun:test";
 import { AssetAmount, IAssetAmountMetadata } from "../AssetAmount.js";
 import { AssetRatio } from "../AssetRatio.js";
 
@@ -101,13 +101,6 @@ describe("AssetAmount", () => {
       new AssetAmount(1000000, sixDecimals).add(new AssetAmount(5000000, 6))
         .amount,
     ).toEqual(6000000n);
-
-    const spyConsole = spyOn(global.console, "warn");
-    new AssetAmount(1000000, 0).add(new AssetAmount(5000000, 6));
-    expect(spyConsole).toHaveBeenCalledWith(
-      AssetAmount.INVALID_DECIMAL_WARNING,
-    );
-    spyConsole.mockReset();
   });
 
   it("should subtract values correctly", () => {
@@ -130,13 +123,6 @@ describe("AssetAmount", () => {
         new AssetAmount(5000000, 6),
       ).amount,
     ).toEqual(5000000n);
-
-    const spyConsole = spyOn(global.console, "warn");
-    new AssetAmount(10000000, 0).subtract(new AssetAmount(5000000, 6));
-    expect(spyConsole).toHaveBeenCalledWith(
-      AssetAmount.INVALID_DECIMAL_WARNING,
-    );
-    spyConsole.mockReset();
   });
 });
 
