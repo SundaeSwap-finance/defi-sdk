@@ -1,6 +1,6 @@
 {
   "name": "@sundaeswap/asset",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A TypeScript interface to handle digital asset amounts along with their respective metadata.",
   "type": "module",
   "author": {
