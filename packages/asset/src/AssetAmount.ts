@@ -9,8 +9,13 @@ export interface IAssetAmountExtraMetadata {
 }
 
 export interface IAssetAmountMetadata extends IAssetAmountExtraMetadata {
-  id?: string;
+  /**
+   * The HEX string of the Policy ID and Asset Name in dot notation.
+   */
   assetId: string;
+  /**
+   * The max decimals of the asset unit.
+   */
   decimals: number;
 }
 
@@ -24,6 +29,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   implements TFungibleToken
 {
   static readonly DEFAULT_FUNGIBLE_TOKEN_DECIMALS = 0;
+  static readonly POLICY_ID_LENGTH = 56;
   static INVALID_METADATA =
     "Cannot perform exchange calculation on an AssetAmount with no metadata.";
 
@@ -72,10 +78,15 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     amount: TIntegerLike = 0n,
     metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
   ) {
+    const sanitizedMeta =
+      typeof metadata === "number"
+        ? undefined
+        : this.normalizeMetadata(metadata);
+
     this.amount = BigInt(amount);
     this.decimals = typeof metadata === "number" ? metadata : metadata.decimals;
-    this.metadata = typeof metadata === "number" ? undefined : metadata;
-    this.id = typeof metadata === "number" ? undefined : metadata.id;
+    this.metadata = sanitizedMeta;
+    this.id = sanitizedMeta?.assetId;
     this.value = AssetAmount.toValue(this.amount, this.decimals);
   }
 
@@ -163,5 +174,23 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     } else {
       return this.exchangeDivide(ar);
     }
+  }
+
+  /**
+   * Ensures that the `assetId` property conforms to dot notation.
+   *
+   * @param {T} metadata The asset metadata object.
+   * @returns {T}
+   */
+  private normalizeMetadata(metadata: T): T {
+    const newMetadata = { ...metadata };
+    if (
+      newMetadata.assetId.length > AssetAmount.POLICY_ID_LENGTH &&
+      !newMetadata.assetId.includes(".")
+    ) {
+      newMetadata.assetId = `${newMetadata.assetId.slice(0, AssetAmount.POLICY_ID_LENGTH)}.${newMetadata.assetId.slice(AssetAmount.POLICY_ID_LENGTH)}`;
+    }
+
+    return newMetadata;
   }
 }

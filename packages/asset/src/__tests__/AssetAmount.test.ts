@@ -208,4 +208,32 @@ describe("AssetAmount with metadata", () => {
       AssetAmount.INVALID_METADATA,
     );
   });
+
+  it("should normalize the metadata", () => {
+    const dotNotation = new AssetAmount(100000, {
+      decimals: 0,
+      assetId:
+        "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
+    });
+
+    expect(dotNotation.id).toEqual(
+      "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
+    );
+    expect(dotNotation.metadata.assetId).toEqual(
+      "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
+    );
+
+    const noDotNotation = new AssetAmount(100000, {
+      decimals: 0,
+      assetId:
+        "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf524245525259",
+    });
+
+    expect(noDotNotation.id).toEqual(
+      "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
+    );
+    expect(noDotNotation.metadata.assetId).toEqual(
+      "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
+    );
+  });
 });
