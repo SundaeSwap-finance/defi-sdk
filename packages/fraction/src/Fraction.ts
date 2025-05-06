@@ -68,7 +68,7 @@ export class Fraction {
       [numerator, denominator] = numerator;
     }
     this.numerator = BigInt(numerator);
-    this.denominator = BigInt(denominator ?? 1n);
+    this.denominator = BigInt(denominator || 1n);
     if (this.denominator === 0n) throw new Error(FractionError.DivisionByZero);
   }
 
