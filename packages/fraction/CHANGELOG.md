@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/fraction@1.0.5...@sundaeswap/fraction@1.0.6) (2025-05-06)
+
+### Bug Fixes
+
+- toString mehtid from Fraction class not working properly for negative values ([c37ac39](https://github.com/SundaeSwap-finance/defi-sdk/commit/c37ac3902adb99b2ea75d890a4190c5c5aea2ac3))
+
 ## [1.0.5](https://github.com/SundaeSwap-finance/defi-sdk/compare/@sundaeswap/fraction@1.0.4...@sundaeswap/fraction@1.0.5) (2024-07-01)
 
 ### Bug Fixes
