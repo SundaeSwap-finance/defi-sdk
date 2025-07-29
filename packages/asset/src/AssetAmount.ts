@@ -110,6 +110,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
   add = (rhs: AssetAmount): AssetAmount<T> => {
     return this.withAmount(this.amount + rhs.amount);
   };
+
   plus = this.add;
 
   subtract = (rhs: AssetAmount): AssetAmount<T> => {
@@ -187,7 +188,7 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
    * @param {T} metadata The asset metadata object.
    * @returns {T}
    */
-  private normalizeMetadata(metadata: T): T {
+  private normalizeMetadata(metadata: T) {
     const newMetadata = { ...metadata };
     if (
       newMetadata.assetId.length > AssetAmount.POLICY_ID_LENGTH &&

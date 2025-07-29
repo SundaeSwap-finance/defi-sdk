@@ -31,20 +31,7 @@ export class Fraction {
       : Fraction.parseString(fraction.toString());
   }
 
-  // static fromLocaleString(numStr: string, locale?: string): Fraction {
-  //   const { decimalSeparator, groupSeparator } = getLocaleFormatOptions(locale);
-  //   const [integerPart, fractionalPart] = numStr.split(decimalSeparator);
-  //   const quotient = BigInt(integerPart.split(groupSeparator).join(""));
-  //   if (!fractionalPart?.length) return new Fraction(quotient);
-  //   const denominator = 10n ** BigInt(fractionalPart.length);
-  //   return new Fraction(
-  //     quotient * denominator + BigInt(fractionalPart),
-  //     denominator
-  //   );
-  // }
-
   static parseString(fractionString: string): Fraction {
-    // Parse a number in various forms (1000, 1.0003, 1.23e4, 1.23e-4) into a numerator and denominator
     fractionString = fractionString.replace(/,/g, "");
 
     if (fractionString.match(/[eE]/)) {
@@ -62,8 +49,7 @@ export class Fraction {
       const numerator = BigInt(integerPart + fractionalPart);
       const denominator = 10n ** BigInt(fractionalPart.length);
 
-      // Simplify the fraction using the GCD function
-      const gcd = (a, b) => (b === 0n ? a : gcd(b, a % b));
+      const gcd = (a: bigint, b: bigint) => (b === 0n ? a : gcd(b, a % b));
       const divisor = gcd(numerator, denominator);
       return new Fraction(numerator / divisor, denominator / divisor);
     }
@@ -210,11 +196,13 @@ export class Fraction {
   }
 
   toString(decimals = Fraction.MAX_DECIMALS): string {
-    const formattedIntegerPart = this.getQuotient().toString();
-    const formattedFractionalPart = this.remainderToString(decimals);
+    const sign = this.lessThan(Fraction.ZERO) ? "-" : "";
+    const absFrac = this.abs();
+    const formattedIntegerPart = absFrac.getQuotient().toString();
+    const formattedFractionalPart = absFrac.remainderToString(decimals);
     return formattedFractionalPart
-      ? `${formattedIntegerPart}.${formattedFractionalPart}`
-      : formattedIntegerPart;
+      ? `${sign}${formattedIntegerPart}.${formattedFractionalPart}`
+      : `${sign}${formattedIntegerPart}`;
   }
 
   /**
