@@ -14,9 +14,9 @@ export interface IAssetAmountMetadata extends IAssetAmountExtraMetadata {
    */
   assetId: string;
   /**
-   * The max decimals of the asset unit.
+   * The decimals of the asset, as defined in its metadata.
    */
-  decimals: number;
+  decimals?: number;
 }
 
 /**
@@ -62,7 +62,9 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
     metadata: number | T = AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS,
   ): AssetAmount<T> {
     const decimals =
-      typeof metadata === "number" ? metadata : metadata.decimals;
+      typeof metadata === "number"
+        ? metadata
+        : metadata?.decimals || AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS;
     return new AssetAmount<T>(
       Fraction.asFraction(value).multiply(10 ** decimals).quotient,
       metadata,
@@ -84,7 +86,10 @@ export class AssetAmount<T extends IAssetAmountMetadata = IAssetAmountMetadata>
         : this.normalizeMetadata(metadata);
 
     this.amount = BigInt(amount);
-    this.decimals = typeof metadata === "number" ? metadata : metadata.decimals;
+    this.decimals =
+      typeof metadata === "number"
+        ? metadata
+        : metadata?.decimals || AssetAmount.DEFAULT_FUNGIBLE_TOKEN_DECIMALS;
     this.metadata = sanitizedMeta;
     this.id = sanitizedMeta?.assetId;
     this.value = AssetAmount.toValue(this.amount, this.decimals);

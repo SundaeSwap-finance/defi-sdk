@@ -236,4 +236,20 @@ describe("AssetAmount with metadata", () => {
       "d441227553a0f1a965fee7d60a0f724b368dd1bddbc208730fccebcf.524245525259",
     );
   });
+
+  it("should default to 0 decimals if not provided", () => {
+    const noParam = new AssetAmount(0n);
+    const withNumber = new AssetAmount(0n, 2);
+    const withMetadata = new AssetAmount(0n, { decimals: 5, assetId: "" });
+    const withoutDecimalInMetadata = new AssetAmount(0n, { assetId: "" });
+
+    expect(noParam.decimals).toEqual(0);
+    expect(noParam.metadata).toBeUndefined();
+    expect(withNumber.decimals).toEqual(2);
+    expect(withNumber.metadata).toBeUndefined();
+    expect(withMetadata.decimals).toEqual(5);
+    expect(withMetadata.metadata.decimals).toEqual(5);
+    expect(withoutDecimalInMetadata.decimals).toEqual(0);
+    expect(withoutDecimalInMetadata.metadata).not.toHaveProperty("decimals");
+  });
 });
