@@ -42,7 +42,7 @@
     "@sundaeswap/fraction": "workspace:*"
   },
   "peerDependencies": {
-    "@sundaeswap/asset": "^1.0.0",
+    "@sundaeswap/asset": "^1.0.11",
     "@sundaeswap/bigint-math": "^0.6.0",
     "@sundaeswap/fraction": "^1.0.0"
   }
