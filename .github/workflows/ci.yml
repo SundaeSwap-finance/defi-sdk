@@ -39,7 +39,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure npm authentication
-        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_ACCESS_TOKEN }}
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
 
       # Build Files
       - name: Build

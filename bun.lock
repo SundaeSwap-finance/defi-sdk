@@ -37,7 +37,7 @@
     },
     "packages/cpp": {
       "name": "@sundaeswap/cpp",
-      "version": "1.0.12",
+      "version": "1.0.13",
       "devDependencies": {
         "@sundaeswap/asset": "workspace:*",
         "@sundaeswap/bigint-math": "workspace:*",
