@@ -28,7 +28,6 @@
     "publish:ci": "lerna publish from-package -y"
   },
   "devDependencies": {
-    "@sundaeswap/babel-preset": "2.0.12",
     "@sundaeswap/eslint-config": "2.0.11",
     "@sundaeswap/prettier-config": "2.0.10",
     "@types/bun": "1.1.6",

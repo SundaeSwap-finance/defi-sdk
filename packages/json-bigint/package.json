@@ -35,5 +35,8 @@
   },
   "dependencies": {
     "json-bigint": "1.0.0"
+  },
+  "devDependencies": {
+    "@sundaeswap/babel-preset": "2.0.17"
   }
 }

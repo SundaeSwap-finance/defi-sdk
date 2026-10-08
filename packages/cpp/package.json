@@ -39,7 +39,8 @@
   "devDependencies": {
     "@sundaeswap/asset": "workspace:*",
     "@sundaeswap/bigint-math": "workspace:*",
-    "@sundaeswap/fraction": "workspace:*"
+    "@sundaeswap/fraction": "workspace:*",
+    "@sundaeswap/babel-preset": "2.0.17"
   },
   "peerDependencies": {
     "@sundaeswap/asset": "^1.0.11",
